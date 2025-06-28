@@ -7,7 +7,6 @@ import QueryBuilder from "../../../core/builders/QueryBuilder";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
 import { User } from "../../base/user/user.model";
-import { Service } from "../../contextual/service/service.model";
 
 const getUserInfo = async (query: Record<string, any>) => {
   if (query?.createdAt) {
@@ -94,8 +93,6 @@ const deleteUser = async (userId: ObjectId) => {
     session.startTransaction();
 
     await User.findByIdAndUpdate(userId, { isDeleted: true }, { session });
-
-    await Service.findOneAndUpdate({ seller: userId }, { isDeleted: true });
 
     await session.commitTransaction();
 

@@ -4,11 +4,7 @@ import { z } from "zod";
 const createUserValidationSchema = z.object({
   body: z
     .object({
-      name: z
-        .string({
-          required_error: "First name is required",
-        })
-        .trim(),
+      userName: z.string().trim().optional(),
 
       profileImage: z
         .string()
@@ -52,16 +48,12 @@ const createUserValidationSchema = z.object({
       message: "Passwords do not match",
     }),
 });
+
 const updateUserValidationSchema = z.object({
   body: z
     .object({
-      name: z
-        .string({
-          required_error: "First name is required",
-        })
-        .trim()
-        .optional(),
-
+      name: z.string().trim().optional(),
+      userName: z.string().trim().optional(),
       profileImage: z
         .string()
         .url()
@@ -71,26 +63,7 @@ const updateUserValidationSchema = z.object({
         )
         .optional(),
 
-      // email: z
-      //   .string({
-      //     required_error: "Email is required",
-      //   })
-      //   .email("Invalid email format"),
-
-      // contactNumber: z.string().optional(),
-
-      // password: z
-      //   .string({
-      //     required_error: "Password is required",
-      //   })
-      //   .min(8, "Password must be at least 8 characters long"),
-
-      // confirmPassword: z.string({
-      //   required_error: "Confirm password is required",
-      // }),
-
       fcmToken: z.string().optional(),
-
       location: z
         .object({
           type: z.literal("Point").optional(),

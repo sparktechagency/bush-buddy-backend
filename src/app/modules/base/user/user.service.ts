@@ -145,12 +145,29 @@ const getUsers = async (
 
 // const getSingleUser = async() => {};
 
-const updateMe = async (userId: ObjectId, payload: Partial<IUser>) => {
-  return User.findByIdAndUpdate(userId, payload);
+const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
+  payload.location = {
+    type: "Point",
+    coordinates: payload?.location?.coordinates,
+  };
+  const updatedUser = await User.findByIdAndUpdate(userId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedUser;
+};
+
+const getMe = async (currentUser: ObjectId) => {
+  // Step 1: Match only active & verified users
+
+  const users = await User.findById(currentUser);
+  return users;
 };
 
 export const userService = {
   createUser,
   getUsers,
   updateMe,
+  getMe,
 };

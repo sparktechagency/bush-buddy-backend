@@ -7,7 +7,6 @@ import express, { Express, Request, Response } from "express";
 import { generateRouteHTML } from "./app/common/utils/home";
 import globalErrorHandler from "./app/core/middlewares/globalErrorHandler";
 import notFound from "./app/core/middlewares/notFound";
-import { initializeApolloServer } from "./graphQl/graphQl.server";
 import router from "./routes";
 
 const app: Express = express();
@@ -32,12 +31,12 @@ app.use(
   })
 );
 
-async function setupGraphQL(app: Express) {
-  await initializeApolloServer(app);
-}
+// async function setupGraphQL(app: Express) {
+//   await initializeApolloServer(app);
+// }
 
 (async () => {
-  await setupGraphQL(app);
+  // await setupGraphQL(app);
 
   // API routes
   app.use(

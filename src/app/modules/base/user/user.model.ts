@@ -41,22 +41,22 @@ const userSchema = new Schema<IUser, UserModel>(
   {
     name: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     userName: {
       type: String,
-      required: false,
+      required: true,
       unique: true,
       trim: true,
       lowercase: true,
-      validate: {
-        validator: function (value) {
-          // Regex to match valid usernames (alphanumeric and underscores)
-          return /^[a-zA-Z0-9_]+$/.test(value);
-        },
-        message: "Username must be alphanumeric and can include underscores",
-      },
+      // validate: {
+      //   validator: function (value) {
+      //     // Regex to match valid usernames (alphanumeric and underscores)
+      //     return /^[a-zA-Z0-9_]+$/.test(value);
+      //   },
+      //   message: "Username must be alphanumeric and can include underscores",
+      // },
       default: "", // Default value for userName
     },
 
@@ -82,22 +82,27 @@ const userSchema = new Schema<IUser, UserModel>(
 
     contactNumber: {
       type: String,
-      required: [true, "Phone number is required"],
+      required: false,
       unique: true,
-      validate: {
-        validator: function (value) {
-          // Regex to match phone numbers with a country code
-          return /^\+(\d{1,4})\d{6,15}$/.test(value); // Ensures the phone number starts with a + followed by a country code and valid phone number
-        },
-        message:
-          "Phone number must be a valid phone number with a country code",
-      },
+      // validate: {
+      //   validator: function (value) {
+      //     // Regex to match phone numbers with a country code
+      //     return /^\+(\d{1,4})\d{6,15}$/.test(value); // Ensures the phone number starts with a + followed by a country code and valid phone number
+      //   },
+      //   message:
+      //     "Phone number must be a valid phone number with a country code",
+      // },
     },
 
     location: {
-      type: { type: String, default: "Point" },
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
       coordinates: {
         type: [Number],
+        default: [0, 0],
       },
     },
 

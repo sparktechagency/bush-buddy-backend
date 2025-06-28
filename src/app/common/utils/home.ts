@@ -9,7 +9,7 @@ export const generateRouteHTML = () => {
 
   return `
     <div style="font-family: sans-serif; padding: 2rem; line-height: 1.7;">
-      <h1 style="font-size: 2rem; margin-bottom: 1rem;">🎯 Navigi E-commerce API Server</h1>
+     <h1 style="font-size: 2rem; margin-bottom: 1rem;">✈️ Bush Buddy Travel APP API Server</h1>
       <p>Available API Endpoints under <code>${baseURL}/api/v1</code>:</p>
       <ul style="padding-left: 1.2rem;">
         ${moduleRoutes

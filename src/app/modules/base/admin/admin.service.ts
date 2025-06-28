@@ -10,7 +10,6 @@ import { User } from "../user/user.model";
 const seedSuperAdmin = async () => {
   const superUser: IUser = {
     name: "Super Admin",
-    userName: "@supperAdmin",
     email: CONFIG.CORE.supper_admin_email!,
     password: CONFIG.CORE.supper_admin_pass!,
     confirmPassword: CONFIG.CORE.supper_admin_pass!,

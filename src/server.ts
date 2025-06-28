@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import app from "./app";
 import { CONFIG } from "./app/core/config";
 import { adminService } from "./app/modules/base/admin/admin.service";
-import { ReviewService } from "./app/modules/contextual/review/review.service";
+
 import { server as socketServer } from "./socket/socket.server";
 
 let server: Server;
@@ -38,9 +38,6 @@ async function main() {
         );
       }
     );
-
-    // Automatically accept pending reviews (CRON-like behavior)
-    await ReviewService.autoAcceptReview();
 
     // Seed the initial Super Admin user (if needed)
     await adminService.seedSuperAdmin();
