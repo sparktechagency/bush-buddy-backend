@@ -1,21 +1,22 @@
 import mongoose, { Schema, model } from "mongoose";
-import { IFollow } from "./follow.interface";
+import { IFriend } from "./friend.interface";
 
-const followSchema = new Schema<IFollow>(
+const FriendSchema = new Schema<IFriend>(
   {
     userId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    followedUserId: {
+    friendId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    isFollowing: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      enum: ["active", "block"],
+      default: "active",
     },
   },
   {
@@ -23,4 +24,4 @@ const followSchema = new Schema<IFollow>(
   }
 );
 
-export const Follow = model<IFollow>("Follow", followSchema);
+export const Friend = model<IFriend>("Friend", FriendSchema);

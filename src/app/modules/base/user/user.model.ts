@@ -214,7 +214,9 @@ userSchema.pre("save", async function () {
 
 userSchema.statics.isUserExistById = async function (id: string) {
   try {
+    console.log("🚀 ~ id:", id);
     const user = await User.findById(id);
+    console.log("🚀 ~ user:", user);
 
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, "User not found2!");

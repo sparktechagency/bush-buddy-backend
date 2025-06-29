@@ -12,8 +12,7 @@ import { notificationRoute } from "../app/modules/base/notification/notification
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
 import { subscriptionsRouter } from "../app/modules/base/subscriptions/subscriptions.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
-
-import { follow_routes } from "../app/modules/contextual/follow/follow.routes";
+import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 
 const router = Router();
 
@@ -59,8 +58,8 @@ const moduleRoutes = [
   },
 
   {
-    path: "/follow",
-    route: follow_routes,
+    path: "/friend",
+    route: friend_routes,
   },
 ];
 

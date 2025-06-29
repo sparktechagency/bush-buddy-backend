@@ -10,5 +10,6 @@ export interface IWaypoint {
   wether: {
     sunrise: string;
     cloud: string;
+    humidity: string;
   };
 }

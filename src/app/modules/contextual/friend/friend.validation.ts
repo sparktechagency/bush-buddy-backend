@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { objectId } from "../../../common/helpers/zod.helper";
 
-const createFollowValidation = z.object({
+const createFriendValidation = z.object({
   body: z
     .object({
-      followedUserId: objectId,
+      friendId: objectId,
     })
     .strict(),
 });
 
-export const follow_validation = {
-  createFollowValidation,
+export const friend_validation = {
+  createFriendValidation,
 };

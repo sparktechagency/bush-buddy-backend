@@ -52,14 +52,14 @@ const getUsers = async (
   // Step 2: Check if current user follows this user (followedUserId)
   pipeline.push({
     $lookup: {
-      from: "follows",
+      from: "friends",
       let: { targetUserId: "$_id" },
       pipeline: [
         {
           $match: {
             $expr: {
               $and: [
-                { $eq: ["$followedUserId", "$$targetUserId"] },
+                { $eq: ["$friendId", "$$targetUserId"] },
                 {
                   $eq: [
                     "$userId",
@@ -72,16 +72,16 @@ const getUsers = async (
         },
         { $limit: 1 },
       ],
-      as: "myFollowCheck",
+      as: "myFriendCheck",
     },
   });
 
   // Step 3: Add isImFollow field
   pipeline.push({
     $addFields: {
-      isImFollow: {
+      isFriend: {
         $cond: {
-          if: { $gt: [{ $size: "$myFollowCheck" }, 0] },
+          if: { $gt: [{ $size: "$myFriendCheck" }, 0] },
           then: true,
           else: false,
         },
@@ -127,7 +127,7 @@ const getUsers = async (
   // Step 4: Remove unnecessary field
   pipeline.push({
     $project: {
-      myFollowCheck: 0,
+      myFriendCheck: 0,
     },
   });
 
