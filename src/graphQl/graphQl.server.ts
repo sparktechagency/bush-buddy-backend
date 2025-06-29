@@ -2,6 +2,7 @@
 import { ApolloServer } from "apollo-server-express";
 import chalk from "chalk";
 import { Express } from "express";
+import { CONFIG } from "../app/core/config";
 import { resolvers } from "./resolver";
 import { typeDefs } from "./schema";
 
@@ -14,7 +15,7 @@ export const initializeApolloServer = async (app: Express) => {
   server.applyMiddleware({ app, path: "/graphql" });
   console.log(
     chalk.bgBlueBright.white(
-      ` ⛳ GraphQL ready at http://192.168.10.180:5002${server.graphqlPath} `
+      ` ⛳ GraphQL ready at http://${CONFIG.CORE.ip}:5002${server.graphqlPath} `
     )
   );
 };

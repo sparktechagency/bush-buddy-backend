@@ -8,6 +8,7 @@ export interface IWaypoint {
     coordinates: number[];
   };
   wether: {
-    
-  }
+    sunrise: string;
+    cloud: string;
+  };
 }
