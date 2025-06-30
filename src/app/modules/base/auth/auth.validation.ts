@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CONFIG } from "../../../core/config";
 
 const loginValidationSchema = z.object({
   body: z
@@ -74,7 +75,10 @@ const verifyOTPSchema = z.object({
         .string({
           required_error: "OTP (One Time Password) is required",
         })
-        .length(6, "OTP must be exactly 6 characters long"),
+        .length(
+          Number(CONFIG.MAIL.otp_length) || 4,
+          `OTP must be exactly ${CONFIG.MAIL.otp_length || 4} characters long`
+        ),
     })
     .strict(),
 });

@@ -24,13 +24,6 @@ const userVerificationSchema = new Schema<IUserVerification>(
     },
     otp: {
       type: String,
-      validate: {
-        validator: function (value) {
-          // Regex to match one-time password (OTP)
-          return /^[0-9]{6}$/.test(value);
-        },
-        message: "One-time password must be a valid 6-digit number",
-      },
       select: 0,
     },
   },
