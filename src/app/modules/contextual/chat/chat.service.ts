@@ -74,8 +74,6 @@ const getMyPartners = async (myId: ObjectId) => {
 };
 
 const sendImages = async (payload: any) => {
-  console.log("🚀 ~ sendImages ~ payload:", payload);
-
   const newChat = new Chat({
     sender: payload.myId,
     receiver: payload.body.partnerId,

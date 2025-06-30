@@ -226,7 +226,6 @@ const forgotPassword = async (email: string) => {
     role: user?.role,
     otp: hashingOtp,
   };
-  console.log("🚀 ~ forgotPassword ~ jwtPayload:", jwtPayload);
 
   const resetToken = jwt.sign(
     jwtPayload,
@@ -234,10 +233,6 @@ const forgotPassword = async (email: string) => {
     {
       expiresIn: CONFIG.MAIL.forgot_pass_link_expire,
     }
-  );
-  console.log(
-    "🚀 ~ forgotPassword ~ CONFIG.JWT.forgot_pass_secret:",
-    CONFIG.JWT.forgot_pass_secret
   );
 
   // set the otp  on the db
@@ -264,12 +259,6 @@ const forgotPassword = async (email: string) => {
 };
 
 const verifyOtp = async (payload: { otp: string }, token: string) => {
-  console.log(
-    "🚀 ~ verifyOtp ~ payload:",
-    payload,
-    CONFIG.JWT.forgot_pass_secret
-  );
-
   // decoded reset password token
   const decodedToken: IOtpToken = jwt.verify(
     token,
@@ -323,7 +312,6 @@ const verifyOtp = async (payload: { otp: string }, token: string) => {
       expiresIn: CONFIG.MAIL.otp_expires,
     }
   );
-  console.log("🚀 ~ verifyOtp ~ resetToken:", resetToken);
   // update new hashed password
   await User.findOneAndUpdate(
     { email: user?.email },

@@ -7,7 +7,6 @@ export const stripeCheckout = async (
   currency: string = "gbp",
   tipsId: string | null
 ) => {
-  console.log("🚀 ~ tipsId:", tipsId?.toString());
 
   if (!amount || amount <= 0) {
     throw new Error("Invalid amount");

@@ -12,10 +12,6 @@ const createSupport = async (payload: ISupport) => {
     payload.subject,
     payload.description
   );
-  console.log(
-    "🚀 ~ createSupport ~ CONFIG.CORE.supper_admin_email:",
-    CONFIG.CORE.supper_admin_email
-  );
 
   const result = await Support.create(payload);
   return result;

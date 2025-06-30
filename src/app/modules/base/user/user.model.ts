@@ -83,7 +83,7 @@ const userSchema = new Schema<IUser, UserModel>(
     contactNumber: {
       type: String,
       required: false,
-      unique: true,
+      // unique: true,
       // validate: {
       //   validator: function (value) {
       //     // Regex to match phone numbers with a country code
@@ -214,9 +214,7 @@ userSchema.pre("save", async function () {
 
 userSchema.statics.isUserExistById = async function (id: string) {
   try {
-    console.log("🚀 ~ id:", id);
     const user = await User.findById(id);
-    console.log("🚀 ~ user:", user);
 
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, "User not found2!");

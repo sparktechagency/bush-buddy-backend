@@ -5,9 +5,7 @@ import catchAsync from "../../utils/catchAsync";
 import { stripe } from "./stripe";
 
 export const isPaymentSuccess = catchAsync(async (req, res) => {
-  console.log("🔥 Hello From STRIPE WEB_HOOK:", req.body);
   const webhookSecret = CONFIG.STRIPE.stripe_webhook_secret as string;
-  console.log("🚀 ~ isPaymentSuccess ~ webhookSecret:", webhookSecret);
 
   const sig = req.headers["stripe-signature"];
 
