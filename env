@@ -1,31 +1,17 @@
-IP=192.168.0.100
+IP=192.168.10.180
 NODE_ENV=development
-PORT=5002
-SOCKET_PORT=3500
-BACKEND_URL=http://192.168.0.100:5008/api/v1
+PORT=5003
+SOCKET_PORT=3700
+BACKEND_URL=http://192.168.10.180:5003v/api/v1
+FRONTEND_URL=https://victoriaade12.vercel.app
+DATABASE_URI=mongodb+srv://webashraf2:6s9snA3cDA6Qk6yE@cluster0.uxmgd.mongodb.net/bush-buddy-ai?retryWrites=true&w=majority&appName=Cluster0
 
 # Super Admin Credintials
 SUPPER_ADMIN_EMAIL=bdcalling.ashraf@gmail.com
 SUPPER_ADMIN_PASS=Application2025!
 
-
-# # ADMIN INFO
-# ADMIN_EMAIL=bdcalling.ashraf@gmail.com
-# ADMIN_PASS=Application2025!
-
-
-# Frontend
-FRONTEND_URL=https://victoriaade12.vercel.app
-# DB
-DATABASE_URI=mongodb+srv://webashraf2:6s9snA3cDA6Qk6yE@cluster0.uxmgd.mongodb.net/vouched-service?retryWrites=true&w=majority&appName=Cluster0
-
 # Bcrypt
 BCRYPT_SALT_ROUNDS=12
-
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=dyalzfwd4
-CLOUDINARY_API_KEY=134213731356285
-CLOUDINARY_API_SECRET=134213731356285
 
 # JWT tokens
 ACCESS_JWT_SECRET=e641dece19454359a761e85e0053079a658b9f4310c2fe7ed50dd0d68e597e91
@@ -37,9 +23,9 @@ PASSWORD_RESET_SECRET=d6076ac211727c9bb66cc55a500a92f5b9c7a594caaa9669982626df9
 d88fb51
 
 # Mail and  OTP
+OTP_LENGTH=4
 SERVICE_USER=web.ashraf2@gmail.com
 MAIL_APP_PASS=umjq cwbp oelq flvs
-# RESET_PASS_UI_LINK=http://localhost:3000
 OTP_EXPIRE=5m
 FORGOT_PASS_LINK_EXPIRE=15m
 SMTP_HOST=smtp.gmail.com
@@ -53,16 +39,14 @@ AWS_SECRET_ACCESS_KEY=L/qxV7jKmM0J1CJhuhFInyeyOEakHC2GF+MT14/U
 AWS_BUCKET=victoria-vouched
 
 # Mail so email checker credentials
-MAILS_SO_API_KEY=4d4e4e86-4da9-4a2a-87e8-5c96c7e6ef13
-
+MAILS_SO_API_KEY=dfasd
 
 # Stripe payment
-STRIPE_SECRET_KEY=sk_test_51RK6i0P1RuWq7AaaLXTbzMIOnEh91tyWMJ7tOgLDzeO8SArsSbTTSPPu2wiEVn2GgDbNcueJ6P2HYbK6h6QegGgs00bXlRLZo9
-STRIPE_WEB_HOOK_SECRET=whsec_rV2744rNCNp31Ajkp8oy5w9CV6qzcFp8
-
+STRIPE_SECRET_KEY=fsd
+STRIPE_WEB_HOOK_SECRET=ds
 
 # Twilio
-TWILIO_ACCOUNT_SID=ACb5bd94c47fc66d4129d41db81c9c45c5
-TWILIO_TOKEN=ce33cd81f5c6ea4ba2035e6836b06686
-TWILIO_MSG_SERVICE_ID=MG984c54d230f44d9c4eee5a7011c58f47
+TWILIO_ACCOUNT_SID=dsf
+TWILIO_TOKEN=fds
+TWILIO_MSG_SERVICE_ID=fds
 
