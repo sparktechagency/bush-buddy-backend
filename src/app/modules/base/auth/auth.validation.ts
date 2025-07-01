@@ -7,10 +7,10 @@ const loginValidationSchema = z.object({
       email: z.string().email("Invalid email address"),
       password: z
         .string()
-        .min(8, "Password must be at least 8 characters long")
-        .regex(/[A-Z]/, "Password must include at least one uppercase letter")
-        .regex(/[0-9]/, "Password must include at least one number")
-        .regex(/[\W_]/, "Password must include at least one special character"),
+        .min(6, "Password must be at least 8 characters long"),
+      // .regex(/[A-Z]/, "Password must include at least one uppercase letter")
+      // .regex(/[0-9]/, "Password must include at least one number")
+      // .regex(/[\W_]/, "Password must include at least one special character"),
 
       fcmToken: z.string().optional(),
     })
