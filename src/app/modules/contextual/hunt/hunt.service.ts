@@ -16,6 +16,8 @@ const getMyHunt = async (
 ) => {
   const huntQuery = new QueryBuilder(
     Hunt.find({
+      status: "approved",
+      isDeleted: false,
       author: new mongoose.Types.ObjectId(String(currentUser)),
     }).populate({
       path: "author",
@@ -40,7 +42,7 @@ const getMyHunt = async (
 
 const getHunt = async (query: Record<string, unknown>) => {
   const huntQuery = new QueryBuilder(
-    Hunt.find().populate({
+    Hunt.find({ status: "approved", isDeleted: false }).populate({
       path: "author",
       select: "name userName email profileImage",
     }),
@@ -62,7 +64,6 @@ const getHunt = async (query: Record<string, unknown>) => {
 };
 
 const updateHunt = async (huntId: ObjectId, payload: Partial<IHunt>) => {
-  console.log("🚀 ~ updateHunt ~ payload:", payload, huntId);
   const hunt = await Hunt.findOne({ _id: huntId, author: payload.author });
 
   if (!hunt) {
@@ -76,9 +77,28 @@ const updateHunt = async (huntId: ObjectId, payload: Partial<IHunt>) => {
   return result;
 };
 
+const deleteMyHunt = async (huntId: ObjectId, author: ObjectId) => {
+  const hunt = await Hunt.findOne({ _id: huntId, author: author });
+
+  if (!hunt) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Your hunt post is not exist in database!"
+    );
+  }
+
+  const result = await Hunt.findByIdAndUpdate(
+    hunt._id,
+    { isDeleted: true },
+    { new: true }
+  );
+  return result;
+};
+
 export const hunt_service = {
   createHunt,
   getMyHunt,
   getHunt,
   updateHunt,
+  deleteMyHunt,
 };

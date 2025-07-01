@@ -1,4 +1,4 @@
-export interface ISubscription {
+export interface IPackage {
   title: string;
   description: string;
   amount: number;

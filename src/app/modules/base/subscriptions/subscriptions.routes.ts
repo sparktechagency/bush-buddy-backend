@@ -9,10 +9,23 @@ import { subscriptionsValidator } from "./subscriptions.validation";
 const router = Router();
 
 router.post(
-  "/create",
-  auth(USER_ROLE.USER),
+  "/",
+  auth(USER_ROLE.ADMIN),
   validateRequest(subscriptionsValidator.createSubscriptionSchema),
   subscriptionsController.createSubscription
+);
+
+router.put(
+  "/",
+  auth(USER_ROLE.ADMIN),
+  validateRequest(subscriptionsValidator.updateSubscriptionSchema),
+  subscriptionsController.updateSubscription
+);
+
+router.get(
+  "/",
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  subscriptionsController.getSubscription
 );
 
 export const subscriptionsRouter = router;

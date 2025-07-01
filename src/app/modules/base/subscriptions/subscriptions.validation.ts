@@ -1,21 +1,38 @@
 import { z } from "zod";
 
-export const createSubscriptionSchema = z.object({
-  body: z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().min(1, "Description is required"),
-    amount: z.number().positive("Amount must be a positive number"),
-    services: z.array(z.string()).min(1, "At least one service is required"),
-    type: z.enum(["basic", "advanced"], {
-      errorMap: () => ({
-        message: "Type must be either 'basic' or 'advanced'",
-      }),
-    }),
-    status: z.enum(["active", "closed"]).optional().default("active"),
-    isDelete: z.boolean().optional().default(false),
-  }),
+const FeatureSchema = z.object({
+  title: z.string(),
+});
+
+const createSubscriptionSchema = z.object({
+  body: z
+    .object({
+      title: z.string(),
+      description: z.string(),
+      amount: z.number(),
+      features: z.array(FeatureSchema),
+      duration: z.enum(["monthly", "yearly"]),
+      services: z.array(z.string()),
+      type: z.enum(["basic", "premium", "advanced"]),
+    })
+    .strict(),
+});
+
+const updateSubscriptionSchema = z.object({
+  body: z
+    .object({
+      title: z.string().optional(),
+      description: z.string().optional(),
+      amount: z.number().optional(),
+      features: z.array(FeatureSchema).optional(),
+      duration: z.enum(["monthly", "yearly"]).optional(),
+      services: z.array(z.string()).optional(),
+      type: z.enum(["basic", "premium", "advanced"]).optional(),
+    })
+    .strict(),
 });
 
 export const subscriptionsValidator = {
   createSubscriptionSchema,
+  updateSubscriptionSchema,
 };

@@ -52,9 +52,27 @@ const updateHunt = catchAsync(async (req, res) => {
   });
 });
 
+const deleteMyHunt = catchAsync(async (req, res) => {
+  const payload = req.body;
+  payload.author = req.user.id;
+
+  const result = await hunt_service.deleteMyHunt(
+    req.params.id as any,
+    req.user.id
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Hunt post deleted successful!",
+    data: result,
+  });
+});
+
 export const hunt_controller = {
   createHunt,
   getMyHunt,
   getHunt,
   updateHunt,
+  deleteMyHunt,
 };

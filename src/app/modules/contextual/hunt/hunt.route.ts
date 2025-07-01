@@ -31,4 +31,6 @@ router.put(
   hunt_controller.updateHunt
 );
 
+router.delete("/:id", auth(USER_ROLE.USER), hunt_controller.deleteMyHunt);
+
 export const hunt_route = router;
