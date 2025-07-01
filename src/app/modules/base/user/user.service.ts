@@ -147,13 +147,15 @@ const getUsers = async (
 // const getSingleUser = async() => {};
 
 const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
-  payload.location = {
-    type: "Point",
-    coordinates: payload?.location?.coordinates,
-  };
+  if (payload?.location?.coordinates) {
+    payload.location = {
+      type: "Point",
+      coordinates: payload?.location?.coordinates,
+    };
+  }
+
   const updatedUser = await User.findByIdAndUpdate(userId, payload, {
     new: true,
-    runValidators: true,
   });
 
   return updatedUser;

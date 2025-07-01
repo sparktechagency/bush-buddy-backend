@@ -17,7 +17,10 @@ export interface IUser {
   profileImage?: string;
   email: string;
   contactNumber: string;
-  location?: string;
+  location: {
+    type: string;
+    coordinates: number[];
+  };
   locationName?: string;
   password: string;
   confirmPassword: string | undefined;
