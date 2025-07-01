@@ -15,8 +15,11 @@ const seedSuperAdmin = async () => {
     confirmPassword: CONFIG.CORE.supper_admin_pass!,
     contactNumber: "+17788990011",
     role: USER_ROLE.ADMIN,
-    location: "Miami, USA",
     locationName: "Miami, USA",
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
+    },
     verification: {
       verified: true,
     },
