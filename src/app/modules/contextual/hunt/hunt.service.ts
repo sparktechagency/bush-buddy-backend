@@ -8,7 +8,13 @@ const createHunt = async (payload: IHunt) => {
 };
 
 const getHunt = async (query: Record<string, unknown>) => {
-  const huntQuery = new QueryBuilder(Hunt.find(), query)
+  const huntQuery = new QueryBuilder(
+    Hunt.find().populate({
+      path: "author",
+      select: "name userName email profileImage",
+    }),
+    query
+  )
     .search(["title"])
     .filter()
     .sort()
