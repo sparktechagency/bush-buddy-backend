@@ -46,6 +46,7 @@ const getUsers = async (
       status: "active",
       "verification.verified": true,
       _id: { $ne: currentUser },
+      role: { $eq: "USER" },
     },
   });
 

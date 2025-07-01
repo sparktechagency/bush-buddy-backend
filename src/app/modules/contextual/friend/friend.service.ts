@@ -49,7 +49,10 @@ const deleteFriend = async (userId: string, friendId: string) => {
   const isFriendExist = await Friend.findOne({ userId, friendId });
 
   if (!isFriendExist) {
-    throw new AppError(httpStatus.NOT_FOUND, "Friend relation not found");
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Param id maybe wrong, friend not found"
+    );
   }
 
   const result = await Friend.findOneAndDelete({ userId, friendId });
