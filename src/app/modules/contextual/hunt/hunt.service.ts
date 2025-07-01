@@ -78,12 +78,16 @@ const updateHunt = async (huntId: ObjectId, payload: Partial<IHunt>) => {
 };
 
 const deleteMyHunt = async (huntId: ObjectId, author: ObjectId) => {
-  const hunt = await Hunt.findOne({ _id: huntId, author: author });
+  const hunt = await Hunt.findOne({
+    _id: huntId,
+    author: author,
+    isDeleted: false,
+  });
 
   if (!hunt) {
     throw new AppError(
       httpStatus.NOT_FOUND,
-      "Your hunt post is not exist in database!"
+      "Your hunt post is not found in database!"
     );
   }
 

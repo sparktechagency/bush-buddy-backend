@@ -16,7 +16,7 @@ router.post(
 );
 
 router.put(
-  "/",
+  "/:id",
   auth(USER_ROLE.ADMIN),
   validateRequest(subscriptionsValidator.updateSubscriptionSchema),
   subscriptionsController.updateSubscription
@@ -26,6 +26,12 @@ router.get(
   "/",
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   subscriptionsController.getSubscription
+);
+
+router.delete(
+  "/:id",
+  auth(USER_ROLE.ADMIN),
+  subscriptionsController.deleteSubscription
 );
 
 export const subscriptionsRouter = router;

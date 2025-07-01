@@ -5,11 +5,12 @@ export interface ISubscription {
   features: [
     {
       title: string;
+      active: boolean;
     },
   ];
   duration: "monthly" | "yearly";
   services: string[];
   type: "basic" | "premium" | "advanced";
   status: "active" | "closed";
-  isDelete: boolean;
+  isDeleted: boolean;
 }

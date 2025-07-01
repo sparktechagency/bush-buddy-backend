@@ -9,6 +9,7 @@ const subscriptionSchema = new Schema<ISubscription>(
     features: [
       {
         title: { type: String, required: true },
+        active: { type: Boolean, default: true },
       },
     ],
     duration: {
@@ -27,7 +28,7 @@ const subscriptionSchema = new Schema<ISubscription>(
       enum: ["active", "closed"],
       default: "active",
     },
-    isDelete: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

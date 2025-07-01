@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const FeatureSchema = z.object({
   title: z.string(),
+  active: z.boolean(),
 });
 
 const createSubscriptionSchema = z.object({
