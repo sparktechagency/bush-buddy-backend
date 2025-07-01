@@ -382,7 +382,14 @@ const changePassword = async (
   userInfo: JwtPayload,
   payload: IUserChangePassword
 ) => {
-  const user = await User.isUserExistByEmail(userInfo.email, "password");
+  await User.isUserExistByEmail(userInfo.email);
+  const user = await User.findOne({ email: userInfo.email }).select(
+    "+password"
+  );
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
 
   // Check password by bcrypt compare
   const isPasswordMatch = await bcrypt.compare(
