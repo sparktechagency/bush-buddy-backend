@@ -12,6 +12,10 @@ const huntSchema = new mongoose.Schema<IHunt>(
       type: String,
       default: "",
     },
+    image: {
+      type: String,
+      default: "",
+    },
     author: {
       type: mongoose.Types.ObjectId,
       ref: "User",

@@ -28,7 +28,22 @@ const getHunt = catchAsync(async (req, res) => {
   });
 });
 
+const updateHunt = catchAsync(async (req, res) => {
+  const payload = req.body;
+  payload.author = req.user.id;
+
+  const result = await hunt_service.updateHunt(req.params.id as any, payload);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Hunt post updated successful!",
+    data: result,
+  });
+});
+
 export const hunt_controller = {
   createHunt,
   getHunt,
+  updateHunt,
 };
