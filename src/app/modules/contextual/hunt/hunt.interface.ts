@@ -6,9 +6,6 @@ export interface IHunt {
   image: string;
   author: ObjectId;
   status: "approved" | "pending";
-  location: {
-    type: string;
-    coordinates: number[];
-  };
+  location: string;
   isDeleted: boolean;
 }

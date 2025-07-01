@@ -19,6 +19,7 @@ router.post(
   hunt_controller.createHunt
 );
 
+router.get("/my-hunt", auth(USER_ROLE.USER), hunt_controller.getMyHunt);
 router.get("/", auth(USER_ROLE.ADMIN, USER_ROLE.USER), hunt_controller.getHunt);
 
 router.put(

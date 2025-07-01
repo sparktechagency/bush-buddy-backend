@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { locationSchema } from "../../../common/helpers/zod.helper";
 
 const create = z.object({
   file: z
@@ -23,7 +22,7 @@ const create = z.object({
     .object({
       title: z.string(),
       description: z.string().optional(),
-      location: locationSchema,
+      location: z.string().optional(),
     })
     .strict(),
 });
@@ -50,7 +49,7 @@ const update = z.object({
     .object({
       title: z.string(),
       description: z.string().optional(),
-      location: locationSchema,
+      location: z.string().optional(),
     })
     .strict(),
 });

@@ -18,6 +18,16 @@ const createHunt = catchAsync(async (req, res) => {
   });
 });
 
+const getMyHunt = catchAsync(async (req, res) => {
+  const result = await hunt_service.getMyHunt(req.user.id, req.query);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "My Hunt post retrieve successful!",
+    data: result,
+  });
+});
+
 const getHunt = catchAsync(async (req, res) => {
   const result = await hunt_service.getHunt(req.query);
   sendResponse(res, {
@@ -44,6 +54,7 @@ const updateHunt = catchAsync(async (req, res) => {
 
 export const hunt_controller = {
   createHunt,
+  getMyHunt,
   getHunt,
   updateHunt,
 };
