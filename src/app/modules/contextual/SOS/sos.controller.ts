@@ -14,6 +14,39 @@ const createSos = catchAsync(async (req, res) => {
   });
 });
 
+const getSos = catchAsync(async (req, res) => {
+  const result = await sos_service.getSos();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sos retrieve successful!",
+    data: result,
+  });
+});
+
+const updateSos = catchAsync(async (req, res) => {
+  const result = await sos_service.updateSos(req.params.id as any, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sos updated successful!",
+    data: result,
+  });
+});
+
+const deactivateSos = catchAsync(async (req, res) => {
+  const result = await sos_service.deactivateSos(req.params.id as any);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sos deactivated successful!",
+    data: result,
+  });
+});
+
 export const sos_controller = {
   createSos,
+  getSos,
+  updateSos,
+  deactivateSos,
 };

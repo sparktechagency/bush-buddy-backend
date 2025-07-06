@@ -7,6 +7,7 @@ const sosSchema = new Schema<ISos>(
       type: String,
       required: [true, "Name is required"],
       trim: true,
+      unique: true,
     },
     phone: {
       type: String,
@@ -23,7 +24,7 @@ const sosSchema = new Schema<ISos>(
     },
   },
   {
-    timestamps: true, // optional: adds createdAt and updatedAt
+    timestamps: true,
   }
 );
 

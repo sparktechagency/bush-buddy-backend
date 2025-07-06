@@ -14,4 +14,14 @@ router.post(
   sos_controller.createSos
 );
 
+router.put(
+  "/:id",
+  auth(USER_ROLE.ADMIN),
+  validateRequest(sos_validation.updateSos),
+  sos_controller.updateSos
+);
+
+router.get("/", auth(USER_ROLE.ADMIN, USER_ROLE.USER), sos_controller.getSos);
+router.delete("/:id", auth(USER_ROLE.ADMIN), sos_controller.deactivateSos);
+
 export const sos_route = router;

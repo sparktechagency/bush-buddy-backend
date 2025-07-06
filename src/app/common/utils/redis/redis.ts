@@ -24,7 +24,7 @@ redisClient.on("error", (err) => {
 const redis = {
   get: async (key: string) => await redisClient.get(key),
 
-  set: async (key: string, value: string) => {
+  set: async (key: string, value: string, p0: string, p1: number) => {
     await redisClient.set(key, value);
   },
 
