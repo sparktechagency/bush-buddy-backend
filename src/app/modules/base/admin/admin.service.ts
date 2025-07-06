@@ -26,6 +26,14 @@ const seedSuperAdmin = async () => {
     msgResponse: {
       isMyLastMessage: true,
     },
+    payment: {
+      status: "free",
+      amount: 0,
+      issuedAt: new Date(),
+      deadline: 0,
+      deadlineType: "month",
+      subscription: undefined as any, // Replace with a valid ObjectId if available
+    }, // default payment object as required by IUser
   };
 
   const isSuperAdminExits = await User.findOne({
