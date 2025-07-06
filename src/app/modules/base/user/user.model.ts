@@ -142,7 +142,26 @@ const userSchema = new Schema<IUser, UserModel>(
       enum: ["active", "blocked", "pending"],
       default: "active",
     },
-
+    payment: {
+      status: {
+        type: String,
+        enum: ["paid", "not-paid", "expired", "free"],
+        default: "not-paid",
+      },
+      subscription: {
+        type: Schema.Types.ObjectId,
+        ref: "Subscription",
+        default: null,
+      },
+      deadline: {
+        type: Number,
+        default: 0,
+      },
+      issuedAt: {
+        type: Date,
+        default: null,
+      },
+    },
     msgResponse: {
       isMyLastMessage: {
         type: Boolean,

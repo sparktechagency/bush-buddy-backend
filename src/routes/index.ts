@@ -9,8 +9,8 @@ import { plansOrderRoutes } from "../app/modules/contextual/plansOrder/plansOrde
 import { accountDetailsRoute } from "../app/modules/admin/accountDetails/accountDetails.routes";
 import { overviewRouter } from "../app/modules/admin/overview/overview.routes";
 import { notificationRoute } from "../app/modules/base/notification/notification.routes";
+import { subscriptionsRouter } from "../app/modules/base/packages/subscriptions.routes";
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
-import { subscriptionsRouter } from "../app/modules/base/subscriptions/subscriptions.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { hunt_route } from "../app/modules/contextual/hunt/hunt.route";
@@ -33,7 +33,7 @@ const moduleRoutes = [
     route: subscriptionsRouter,
   },
   {
-    path: "/subscription-order",
+    path: "/payment",
     route: plansOrderRoutes,
   },
 

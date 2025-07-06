@@ -54,9 +54,36 @@ const deleteSubscription = catchAsync(async (req, res) => {
   });
 });
 
+const paymentASubscription = catchAsync(async (req, res) => {
+  const result = await subscriptionsService.paymentASubscription(
+    req.params.subId as any,
+    req.user.id
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment link created successfully",
+    data: result,
+  });
+});
+
+const paymentSuccessStripe = catchAsync(async (req, res) => {
+  const result = await subscriptionsService.paymentSuccessStripe(
+    req.query as any
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment link created successfully",
+    data: result,
+  });
+});
+
 export const subscriptionsController = {
   createSubscription,
   updateSubscription,
   getSubscription,
   deleteSubscription,
+  paymentASubscription,
+  paymentSuccessStripe,
 };

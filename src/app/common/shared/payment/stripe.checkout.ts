@@ -7,7 +7,6 @@ export const stripeCheckout = async (
   currency: string = "gbp",
   tipsId: string | null
 ) => {
-
   if (!amount || amount <= 0) {
     throw new Error("Invalid amount");
   }
@@ -15,7 +14,7 @@ export const stripeCheckout = async (
     throw new Error("Tips ID is required!");
   }
 
-  const session = await stripe.checkout.sessions.create({
+  return await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
       {
@@ -40,6 +39,4 @@ export const stripeCheckout = async (
       },
     },
   });
-
-  return session;
 };

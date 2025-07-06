@@ -34,4 +34,15 @@ router.delete(
   subscriptionsController.deleteSubscription
 );
 
+router.post(
+  "/pay/:subId",
+  auth(USER_ROLE.USER),
+  subscriptionsController.paymentASubscription
+);
+
+router.get(
+  "/success-api-stripe/success",
+  subscriptionsController.paymentSuccessStripe
+);
+
 export const subscriptionsRouter = router;

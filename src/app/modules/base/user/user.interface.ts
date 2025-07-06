@@ -28,7 +28,14 @@ export interface IUser {
   fcmToken?: string;
   verification?: IUserVerification;
   status?: "active" | "blocked" | "pending";
-
+  payment: {
+    status: "paid" | "not-paid" | "expired" | "free";
+    amount: number;
+    issuedAt: Date;
+    deadline: number;
+    deadlineType: "day" | "week" | "month" | "year";
+    subscription: ObjectId;
+  };
   msgResponse?: {
     isMyLastMessage: boolean;
   };
