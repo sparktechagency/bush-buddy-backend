@@ -176,6 +176,42 @@ const paymentSuccessStripe = async (payload: any) => {
   return session;
 };
 
+const paymentCancelStripe = async (payload: any) => {
+  if (!payload.session_id) {
+    throw new AppError(httpStatus.BAD_REQUEST, "session_id is required");
+  }
+
+  const session = await stripe.checkout.sessions.retrieve(payload.session_id, {
+    expand: ["line_items", "customer"],
+  });
+
+  const subscriptionID = session.metadata?.subscriptionID || null;
+
+  if (session.client_reference_id) {
+    const userId = session.client_reference_id as string;
+    const deadline = Number(session.metadata!.deadline);
+
+    const user = await User.isUserExistById(userId as any);
+
+    if (user?.payment?.status === "paid") {
+      throw new AppError(httpStatus.BAD_REQUEST, "User is already paid");
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $set: {
+        "payment.status": "paid",
+        "payment.amount": session.amount_total ?? 0,
+        "payment.deadline": deadline || 0,
+        "payment.deadlineType": session.metadata!.deadlineType || null,
+        "payment.issuedAt": session.metadata!.issuedAt || new Date(),
+        "payment.subscription": subscriptionID,
+      },
+    });
+  }
+
+  return session;
+};
+
 export const subscriptionsService = {
   createSubscription,
   updateSubscription,
@@ -183,6 +219,7 @@ export const subscriptionsService = {
   deleteSubscription,
   paymentASubscription,
   paymentSuccessStripe,
+  paymentCancelStripe,
 };
 
 // import httpStatus from "http-status";

@@ -1,6 +1,8 @@
+import axios from "axios";
 import httpStatus from "http-status";
 import mongoose, { ObjectId } from "mongoose";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
+import { CONFIG } from "../../../core/config";
 import AppError from "../../../core/error/AppError";
 import { IHunt } from "./hunt.interface";
 import { Hunt } from "./hunt.model";
@@ -73,8 +75,7 @@ const updateHunt = async (huntId: ObjectId, payload: Partial<IHunt>) => {
     );
   }
 
-  const result = await Hunt.findByIdAndUpdate(hunt._id, payload, { new: true });
-  return result;
+  return await Hunt.findByIdAndUpdate(hunt._id, payload, { new: true });
 };
 
 const deleteMyHunt = async (huntId: ObjectId, author: ObjectId) => {
@@ -91,12 +92,23 @@ const deleteMyHunt = async (huntId: ObjectId, author: ObjectId) => {
     );
   }
 
-  const result = await Hunt.findByIdAndUpdate(
+  return await Hunt.findByIdAndUpdate(
     hunt._id,
     { isDeleted: true },
     { new: true }
   );
-  return result;
+};
+
+const getWeather = async (query: Record<string, unknown>) => {
+  if (!query?.city) {
+    throw new AppError(httpStatus.BAD_GATEWAY, "City name must be provided!");
+  }
+
+  const apiKey = CONFIG.OTHER.open_weather_pai_key;
+  console.log("🚀 ~ getWeather ~ apiKey:", apiKey);
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${query?.city}&units=metric&appid=${apiKey}`;
+
+  return await axios.get(url);
 };
 
 export const hunt_service = {
@@ -105,4 +117,5 @@ export const hunt_service = {
   getHunt,
   updateHunt,
   deleteMyHunt,
+  getWeather,
 };

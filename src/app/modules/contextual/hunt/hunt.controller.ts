@@ -69,10 +69,25 @@ const deleteMyHunt = catchAsync(async (req, res) => {
   });
 });
 
+const getWeather = catchAsync(async (req, res) => {
+  const payload = req.body;
+  payload.author = req.user.id;
+
+  const result = await hunt_service.getWeather(req.query as any);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Wether retrieve successful!",
+    data: result,
+  });
+});
+
 export const hunt_controller = {
   createHunt,
   getMyHunt,
   getHunt,
   updateHunt,
   deleteMyHunt,
+  getWeather,
 };

@@ -21,6 +21,7 @@ async function createStripeSubscriptionSession(
   user: UserInfo,
   currency: string
 ) {
+  console.log("🚀 ~ amount:", amount * 100, amount);
   if (!amount || amount <= 0) {
     throw new Error("Invalid amount");
   }
@@ -39,7 +40,7 @@ async function createStripeSubscriptionSession(
             product_data: {
               name: "Custom Subscription",
             },
-            unit_amount: 10 * 100,
+            unit_amount: Math.round(amount * 100),
             recurring: {
               interval: "month",
             },
@@ -56,7 +57,7 @@ async function createStripeSubscriptionSession(
         deadlineType: user.deadlineType || null,
       },
       success_url: `${CONFIG.CORE.backend_url}/subscription/success-api-stripe/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: "http://192.168.10.180:5200/cancel",
+      cancel_url: `${CONFIG.CORE.backend_url}/subscription/success-api-stripe/cancel`,
     });
 
     return session.url;

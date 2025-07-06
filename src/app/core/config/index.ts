@@ -71,4 +71,9 @@ export const CONFIG = {
     twilio_token: process.env.TWILIO_TOKEN,
     twilio_msg_service_id: process.env.TWILIO_MSG_SERVICE_ID,
   },
+
+  // Other
+  OTHER: {
+    open_weather_pai_key: process.env.OPENWEATHER_API_KEY,
+  },
 };

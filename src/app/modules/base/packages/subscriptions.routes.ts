@@ -44,5 +44,9 @@ router.get(
   "/success-api-stripe/success",
   subscriptionsController.paymentSuccessStripe
 );
+// router.get(
+//   "/success-api-stripe/cancel",
+//   subscriptionsController.paymentSuccessStripe
+// );
 
 export const subscriptionsRouter = router;

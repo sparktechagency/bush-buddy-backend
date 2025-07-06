@@ -32,5 +32,10 @@ router.put(
 );
 
 router.delete("/:id", auth(USER_ROLE.USER), hunt_controller.deleteMyHunt);
+router.get(
+  "/weather",
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
+  hunt_controller.getWeather
+);
 
 export const hunt_route = router;

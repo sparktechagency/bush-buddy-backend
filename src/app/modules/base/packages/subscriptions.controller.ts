@@ -79,6 +79,18 @@ const paymentSuccessStripe = catchAsync(async (req, res) => {
   });
 });
 
+// const paymentCancelStripe = catchAsync(async (req, res) => {
+//   const result = await subscriptionsService.paymentSuccessStripe(
+//     req.query as any
+//   );
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Payment link created successfully",
+//     data: result,
+//   });
+// });
+
 export const subscriptionsController = {
   createSubscription,
   updateSubscription,
@@ -86,4 +98,5 @@ export const subscriptionsController = {
   deleteSubscription,
   paymentASubscription,
   paymentSuccessStripe,
+  // paymentCancelStripe,
 };
