@@ -43,13 +43,19 @@ async function main() {
     await adminService.seedSuperAdmin();
 
     // Start the Socket.IO server
-    socketServer.listen(CONFIG.CORE.socket_port, () => {
-      console.log(
-        chalk.bgYellowBright(
-          `🗨️  Socket is running at http://localhost:${CONFIG.CORE.socket_port} `
-        )
-      );
-    });
+    socketServer.listen(
+      {
+        port: CONFIG.CORE.socket_port,
+        host: CONFIG.CORE.ip,
+      },
+      () => {
+        console.log(
+          chalk.bgYellowBright(
+            `🗨️  Socket is running at http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.socket_port}`
+          )
+        );
+      }
+    );
   } catch (err) {
     console.error("❌ Failed to start the server.");
     console.error(err);
