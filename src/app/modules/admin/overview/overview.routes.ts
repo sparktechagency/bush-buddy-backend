@@ -25,4 +25,10 @@ router.put(
   overviewController.updateAdmin
 );
 
+router.get(
+  "/earnings",
+  auth(USER_ROLE.ADMIN),
+  overviewController.totalEarnings
+);
+
 export const overviewRouter = router;

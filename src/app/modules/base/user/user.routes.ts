@@ -34,4 +34,5 @@ router.get(
 
 router.put("/block-user/:id", auth(USER_ROLE.ADMIN), userController.blockUser);
 
+
 export const userRoute = router;

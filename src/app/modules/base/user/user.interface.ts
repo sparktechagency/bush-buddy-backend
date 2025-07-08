@@ -11,6 +11,7 @@ export interface IUserVerification {
 
 export interface IPayment {
   status: "paid" | "not-paid" | "expired" | "free";
+  totalPay: number;
   amount: number;
   issuedAt: Date | null;
   deadline: number;

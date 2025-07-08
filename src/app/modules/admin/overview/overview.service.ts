@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-import { ObjectId } from "mongoose";
+import { ObjectId, PipelineStage } from "mongoose";
 import { monthNames } from "../../../common/helpers/query.halpers";
 import AppError from "../../../core/error/AppError";
 import { User } from "../../base/user/user.model";
@@ -89,4 +89,17 @@ const updateAdmin = async (adminId: ObjectId, payload: any) => {
   return result;
 };
 
-export const overviewService = { getUserChart, updateAdmin };
+const getEarnings = async () => {
+  const pipeline: PipelineStage[] = [];
+
+  pipeline.push({
+    $group: {
+      _id: null,
+      totalEarnings: { $sum: "$payment.totalPay" },
+    },
+  });
+
+  const result = await User.aggregate(pipeline);
+  return result[0]?.totalEarnings ?? 0;
+};
+export const overviewService = { getUserChart, updateAdmin, getEarnings };

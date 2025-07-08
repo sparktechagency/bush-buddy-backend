@@ -28,4 +28,14 @@ const updateAdmin = catchAsync(async (req, res) => {
   });
 });
 
-export const overviewController = { getUserChart, updateAdmin };
+const totalEarnings = catchAsync(async (req, res) => {
+  const result = await overviewService.getEarnings();
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Total earning retrieve successful!",
+    data: result,
+  });
+});
+
+export const overviewController = { getUserChart, updateAdmin, totalEarnings };

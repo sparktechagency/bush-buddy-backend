@@ -46,6 +46,10 @@ const paymentSchema = new Schema<IPayment>(
       enum: ["paid", "not-paid", "expired", "free"],
       default: "not-paid",
     },
+    totalPay: {
+      type: Number,
+      default: 0,
+    },
     amount: {
       type: Number,
       default: 0,

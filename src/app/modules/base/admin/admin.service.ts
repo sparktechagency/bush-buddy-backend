@@ -28,6 +28,7 @@ const seedSuperAdmin = async () => {
     },
     payment: {
       status: "free",
+      totalPay: 0,
       amount: 0,
       issuedAt: new Date(),
       deadline: 0,

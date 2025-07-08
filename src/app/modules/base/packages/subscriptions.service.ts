@@ -164,6 +164,7 @@ const paymentSuccessStripe = async (payload: any) => {
     await User.findByIdAndUpdate(userId, {
       $set: {
         "payment.status": "paid",
+        "payment.totalPay": { $inc: session.amount_total ?? 0 },
         "payment.amount": session.amount_total ?? 0,
         "payment.deadline": deadline || 0,
         "payment.deadlineType": session.metadata!.deadlineType || null,
