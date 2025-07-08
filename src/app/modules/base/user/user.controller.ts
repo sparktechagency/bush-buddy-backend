@@ -51,7 +51,10 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
 });
 
 const blockUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await userService.blockUser(req.params.id as any);
+  const result = await userService.blockUser(
+    req.params.id as any,
+    req.query.status as string
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

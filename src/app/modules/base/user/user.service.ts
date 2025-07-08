@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose, { ObjectId, PipelineStage } from "mongoose";
 
+import httpStatus from "http-status";
 import { paginationHelper } from "../../../common/helpers/pagination.helper";
 import pickQuery from "../../../common/utils/query.pick";
 import { USER_ROLE } from "../../../core/constants/global.constants";
+import AppError from "../../../core/error/AppError";
 import { authService } from "../auth/auth.service";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
@@ -165,10 +167,19 @@ const getMe = async (currentUser: ObjectId) => {
   return await User.findById(currentUser);
 };
 
-const blockUser = async (userId: ObjectId) => {
+const blockUser = async (userId: ObjectId, status: string) => {
+  const VALID_STATUSES = ["blocked", "active"];
+
+  if (!VALID_STATUSES.includes(status)) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "status is required in query params"
+    );
+  }
+
   return await User.findByIdAndUpdate(
     userId,
-    { status: "blocked" },
+    { status },
     {
       new: true,
     }
