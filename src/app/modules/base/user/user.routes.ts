@@ -25,10 +25,13 @@ router.put(
 );
 
 router.get("/", auth(USER_ROLE.USER, USER_ROLE.ADMIN), userController.getUser);
+
 router.get(
   "/get-me",
   auth(USER_ROLE.USER, USER_ROLE.ADMIN),
   userController.getMe
 );
+
+router.put("/block-user/:id", auth(USER_ROLE.ADMIN), userController.blockUser);
 
 export const userRoute = router;

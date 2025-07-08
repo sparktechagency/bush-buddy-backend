@@ -50,9 +50,20 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const blockUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.blockUser(req.params.id as any);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Seller created successfully!!",
+    data: result,
+  });
+});
 export const userController = {
   createUser,
   getUser,
   getMe,
   updateMe,
+  blockUser,
 };

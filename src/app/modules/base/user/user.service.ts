@@ -162,10 +162,17 @@ const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
 };
 
 const getMe = async (currentUser: ObjectId) => {
-  // Step 1: Match only active & verified users
+  return await User.findById(currentUser);
+};
 
-  const users = await User.findById(currentUser);
-  return users;
+const blockUser = async (userId: ObjectId) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    { status: "blocked" },
+    {
+      new: true,
+    }
+  );
 };
 
 export const userService = {
@@ -173,4 +180,5 @@ export const userService = {
   getUsers,
   updateMe,
   getMe,
+  blockUser,
 };
