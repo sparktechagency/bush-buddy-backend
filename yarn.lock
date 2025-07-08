@@ -3676,6 +3676,11 @@ onetime@^7.0.0:
   dependencies:
     mimic-function "^5.0.0"
 
+openweather-api-node@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/openweather-api-node/-/openweather-api-node-3.1.5.tgz#73cff87977a3e0542fdf5f9871a046508bd2902f"
+  integrity sha512-FGLE0bWOTvp4XHaswmzMfisYMMEtwEwOEJR0vaS07L31OUcutV/UUO5/vRuktkRPoqfk3KZOoqddsRTGTxT7Aw==
+
 optionator@^0.9.3:
   version "0.9.4"
   resolved "https://registry.npmjs.org/optionator/-/optionator-0.9.4.tgz"

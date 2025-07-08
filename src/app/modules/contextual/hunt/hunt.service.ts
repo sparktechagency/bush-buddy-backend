@@ -1,8 +1,7 @@
-import axios from "axios";
 import httpStatus from "http-status";
 import mongoose, { ObjectId } from "mongoose";
+import OpenWeatherAPI from "openweather-api-node";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
-import { CONFIG } from "../../../core/config";
 import AppError from "../../../core/error/AppError";
 import { IHunt } from "./hunt.interface";
 import { Hunt } from "./hunt.model";
@@ -99,17 +98,36 @@ const deleteMyHunt = async (huntId: ObjectId, author: ObjectId) => {
   );
 };
 
-const getWeather = async (query: Record<string, unknown>) => {
-  if (!query?.city) {
-    throw new AppError(httpStatus.BAD_GATEWAY, "City name must be provided!");
-  }
+const getWeather = async (query: { city?: string }) => {
+  const location = query.city;
 
-  const apiKey = CONFIG.OTHER.open_weather_pai_key;
-  console.log("🚀 ~ getWeather ~ apiKey:", apiKey);
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${query?.city}&units=metric&appid=${apiKey}`;
+  const weather = new OpenWeatherAPI({
+    key: process.env.OPENWEATHER_API_KEY as string,
+    locationName: location,
+    units: "metric", // You can change to "imperial" if needed
+  });
 
-  return await axios.get(url);
+  const data = await weather.getCurrent();
+
+  return {
+    city: location,
+    temp: data.weather.temp.cur,
+    condition: data.weather.description,
+    details: data,
+  };
 };
+
+// const getWeather = async (query: Record<string, unknown>) => {
+//   if (!query?.city) {
+//     throw new AppError(httpStatus.BAD_GATEWAY, "City name must be provided!");
+//   }
+
+//   const apiKey = CONFIG.OTHER.open_weather_pai_key;
+//   console.log("🚀 ~ getWeather ~ apiKey:", apiKey);
+//   const url = `https://api.openweathermap.org/data/2.5/weather?q=${query?.city}&units=metric&appid=${apiKey}`;
+
+//   return await axios.get(url);
+// };
 
 export const hunt_service = {
   createHunt,
