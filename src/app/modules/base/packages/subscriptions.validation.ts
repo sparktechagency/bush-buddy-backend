@@ -8,11 +8,10 @@ const createSubscriptionSchema = z.object({
   body: z
     .object({
       title: z.string(),
-      description: z.string(),
+      description: z.string().optional(),
       amount: z.number(),
       features: z.array(FeatureSchema),
       duration: z.enum(["monthly", "yearly"]),
-      services: z.array(z.string()),
       type: z.enum(["basic", "premium", "advanced"]),
     })
     .strict(),
@@ -26,7 +25,6 @@ const updateSubscriptionSchema = z.object({
       amount: z.number().optional(),
       features: z.array(FeatureSchema).optional(),
       duration: z.enum(["monthly", "yearly"]).optional(),
-      services: z.array(z.string()).optional(),
       type: z.enum(["basic", "premium", "advanced"]).optional(),
     })
     .strict(),

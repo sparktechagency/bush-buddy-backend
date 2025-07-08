@@ -4,7 +4,7 @@ import { ISubscription } from "./subscriptions.interface";
 const subscriptionSchema = new Schema<ISubscription>(
   {
     title: { type: String, required: true, unique: true },
-    description: { type: String, required: true },
+    description: { type: String, required: false, default: "" },
     amount: { type: Number, required: true },
     features: [
       {
@@ -17,7 +17,6 @@ const subscriptionSchema = new Schema<ISubscription>(
       enum: ["monthly", "yearly"],
       required: true,
     },
-    services: [{ type: String, required: true }],
     type: {
       type: String,
       enum: ["basic", "premium", "advanced"],
