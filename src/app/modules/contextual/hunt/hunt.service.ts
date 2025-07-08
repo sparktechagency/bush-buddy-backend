@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import mongoose, { ObjectId } from "mongoose";
 import OpenWeatherAPI from "openweather-api-node";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
+import { CONFIG } from "../../../core/config";
 import AppError from "../../../core/error/AppError";
 import { IHunt } from "./hunt.interface";
 import { Hunt } from "./hunt.model";
@@ -102,7 +103,7 @@ const getWeather = async (query: { city?: string }) => {
   const location = query.city;
 
   const weather = new OpenWeatherAPI({
-    key: process.env.OPENWEATHER_API_KEY as string,
+    key: CONFIG.OTHER.open_weather_pai_key as string,
     locationName: location,
     units: "metric", // You can change to "imperial" if needed
   });
