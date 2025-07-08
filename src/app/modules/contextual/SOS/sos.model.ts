@@ -7,7 +7,11 @@ const sosSchema = new Schema<ISos>(
       type: String,
       required: [true, "Name is required"],
       trim: true,
-      unique: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     phone: {
       type: String,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import mongoose, { ObjectId } from "mongoose";
 import OpenWeatherAPI from "openweather-api-node";
@@ -100,35 +101,33 @@ const deleteMyHunt = async (huntId: ObjectId, author: ObjectId) => {
 };
 
 const getWeather = async (query: { city?: string }) => {
-  const location = query.city;
+  const location = query.city || "New York";
 
   const weather = new OpenWeatherAPI({
     key: CONFIG.OTHER.open_weather_pai_key as string,
     locationName: location,
-    units: "metric", // You can change to "imperial" if needed
+    units: "metric",
   });
 
-  const data = await weather.getCurrent();
+  // Fetch current weather
+  const current = await weather.getCurrent();
+
+  // Fetch forecast data (usually for next 5 days)
+  const forecastData: any = await weather.getForecast();
+
+  const nextThreeDays = forecastData?.slice(1, 4).map((day: any) => day);
+
+  // Yesterday's weather is not available in this package
+  const yesterdayNote =
+    "To access yesterday's weather, you need to use OpenWeather's One Call Historical API (requires paid plan).";
 
   return {
     city: location,
-    temp: data.weather.temp.cur,
-    condition: data.weather.description,
-    details: data,
+    today: current,
+    forecast: nextThreeDays,
+    yesterday: yesterdayNote,
   };
 };
-
-// const getWeather = async (query: Record<string, unknown>) => {
-//   if (!query?.city) {
-//     throw new AppError(httpStatus.BAD_GATEWAY, "City name must be provided!");
-//   }
-
-//   const apiKey = CONFIG.OTHER.open_weather_pai_key;
-//   console.log("🚀 ~ getWeather ~ apiKey:", apiKey);
-//   const url = `https://api.openweathermap.org/data/2.5/weather?q=${query?.city}&units=metric&appid=${apiKey}`;
-
-//   return await axios.get(url);
-// };
 
 export const hunt_service = {
   createHunt,

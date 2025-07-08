@@ -5,6 +5,7 @@ import sendResponse from "../../../common/utils/sendResponse";
 import { sos_service } from "./sos.service";
 
 const createSos = catchAsync(async (req, res) => {
+  req.body.user = req.user.id;
   const result = await sos_service.createSos(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -16,6 +17,16 @@ const createSos = catchAsync(async (req, res) => {
 
 const getSos = catchAsync(async (req, res) => {
   const result = await sos_service.getSos();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sos retrieve successful!",
+    data: result,
+  });
+});
+
+const getMySos = catchAsync(async (req, res) => {
+  const result = await sos_service.getMySos(req.user.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -47,6 +58,7 @@ const deactivateSos = catchAsync(async (req, res) => {
 export const sos_controller = {
   createSos,
   getSos,
+  getMySos,
   updateSos,
   deactivateSos,
 };
