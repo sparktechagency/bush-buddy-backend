@@ -14,4 +14,6 @@ router.post(
   tips_controller.createTips
 );
 
+router.get("/", auth(USER_ROLE.ADMIN, USER_ROLE.USER), tips_controller.getTips);
+
 export const tips_routes = router;

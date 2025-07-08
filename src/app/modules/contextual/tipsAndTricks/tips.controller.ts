@@ -15,6 +15,17 @@ const createTips = catchAsync(async (req, res) => {
   });
 });
 
+const getTips = catchAsync(async (req, res) => {
+  const result = await tips_service.getTips(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Tips retrieve successful!",
+    data: result,
+  });
+});
+
 export const tips_controller = {
   createTips,
+  getTips,
 };
