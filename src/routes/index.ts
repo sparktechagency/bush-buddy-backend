@@ -15,6 +15,7 @@ import { userRoute } from "../app/modules/base/user/user.routes";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { hunt_route } from "../app/modules/contextual/hunt/hunt.route";
 import { sos_route } from "../app/modules/contextual/SOS/sos.route";
+import { tips_routes } from "../app/modules/contextual/tipsAndTricks/tips.routes";
 
 const router = Router();
 
@@ -72,6 +73,11 @@ const moduleRoutes = [
   {
     path: "/sos",
     route: sos_route,
+  },
+
+  {
+    path: "/tips-tricks",
+    route: tips_routes,
   },
 ];
 
