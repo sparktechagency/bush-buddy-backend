@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import mongoose, { ObjectId } from "mongoose";
 import redis from "../../../common/utils/redis/redis";
+import { sendEmail } from "../../../common/utils/sendEmail/sendEmail";
 import AppError from "../../../core/error/AppError";
 import { ISos } from "./sos.interface";
 import { Sos } from "./sos.model";
@@ -82,10 +84,50 @@ const deactivateSos = async (sosId: ObjectId) => {
   return res;
 };
 
+const sendSosMail = async (myId: ObjectId, location: string) => {
+  if (!location) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "location is missing in query url"
+    );
+  }
+  const sosList: any[] = await Sos.find({
+    user: myId,
+    isActive: true,
+  })
+    .populate({
+      path: "user",
+    })
+    .select("email user -_id");
+
+  // Example: extract emails to send
+  const emails = sosList
+    .map((sos: any) => sos?.email)
+    .filter((email: string | undefined) => !!email);
+
+  emails.map((email) => {
+    sendEmail(
+      email,
+      `Urgent Alert: ${sosList[0]?.user?.name} May Be in Danger at ${location}`,
+      `Dear Concern,
+
+We would like to inform you that ${sosList[0]?.user?.name} may be in a potentially risky situation at the following location: ${location}.
+
+This alert has been triggered for safety purposes, and immediate attention may be required. If you are able to reach out or assist in any way, please do so promptly.
+
+We are continuously monitoring the situation and will keep you updated if more information becomes available.
+
+Stay safe,
+The Security Monitoring Team`
+    );
+  });
+};
+
 export const sos_service = {
   createSos,
   getSos,
   getMySos,
   updateSos,
   deactivateSos,
+  sendSosMail,
 };

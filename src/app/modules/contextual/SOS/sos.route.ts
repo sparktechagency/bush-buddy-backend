@@ -14,19 +14,24 @@ router.post(
   sos_controller.createSos
 );
 
-router.put(
-  "/:id",
-  auth(USER_ROLE.USER),
-  validateRequest(sos_validation.updateSos),
-  sos_controller.updateSos
-);
-
 router.get("/", auth(USER_ROLE.ADMIN, USER_ROLE.USER), sos_controller.getSos);
 router.get(
   "/my-sos",
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   sos_controller.getMySos
 );
-router.delete("/:id", auth(USER_ROLE.ADMIN), sos_controller.deactivateSos);
+
+router.put(
+  "/send-sos-mail",
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  sos_controller.sendSosMail
+);
+
+router.put(
+  "/:id",
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  validateRequest(sos_validation.updateSos),
+  sos_controller.updateSos
+);
 
 export const sos_route = router;

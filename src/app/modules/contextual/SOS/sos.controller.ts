@@ -55,10 +55,24 @@ const deactivateSos = catchAsync(async (req, res) => {
   });
 });
 
+const sendSosMail = catchAsync(async (req, res) => {
+  const result = await sos_service.sendSosMail(
+    req.user.id as any,
+    req.query.location as any
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Send SOS mail successful!",
+    data: result,
+  });
+});
+
 export const sos_controller = {
   createSos,
   getSos,
   getMySos,
   updateSos,
   deactivateSos,
+  sendSosMail,
 };
