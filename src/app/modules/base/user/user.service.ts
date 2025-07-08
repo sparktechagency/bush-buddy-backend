@@ -45,7 +45,7 @@ const getUsers = async (
   pipeline.push({
     $match: {
       isDeleted: false,
-      status: "active",
+      // status: "active",
       "verification.verified": true,
       _id: { $ne: currentUser },
       role: { $eq: "USER" },

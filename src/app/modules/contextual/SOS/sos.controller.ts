@@ -45,16 +45,6 @@ const updateSos = catchAsync(async (req, res) => {
   });
 });
 
-const deactivateSos = catchAsync(async (req, res) => {
-  const result = await sos_service.deactivateSos(req.params.id as any);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Sos deactivated successful!",
-    data: result,
-  });
-});
-
 const sendSosMail = catchAsync(async (req, res) => {
   const result = await sos_service.sendSosMail(
     req.user.id as any,
@@ -64,6 +54,19 @@ const sendSosMail = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Send SOS mail successful!",
+    data: result,
+  });
+});
+
+const deactivateSos = catchAsync(async (req, res) => {
+  const result = await sos_service.deactivateSos(
+    req.params.id as any,
+    req.user.id as any
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sos deactivated successful!",
     data: result,
   });
 });

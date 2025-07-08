@@ -34,4 +34,10 @@ router.put(
   sos_controller.updateSos
 );
 
+router.delete(
+  "/deactivate-sos/:id",
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  sos_controller.deactivateSos
+);
+
 export const sos_route = router;

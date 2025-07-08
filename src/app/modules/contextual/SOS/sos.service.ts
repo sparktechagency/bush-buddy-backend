@@ -15,23 +15,24 @@ const createSos = async (payload: ISos) => {
   });
 
   if (sos.length >= 3) {
-    throw new AppError(httpStatus.BAD_REQUEST, "You have allready 3 sos!!");
+    throw new AppError(httpStatus.BAD_REQUEST, "You already have 3 SOS!!");
   }
+
   const res = await Sos.create(payload);
 
   await redis.set(`sos:${res._id}`, JSON.stringify(res), "EX", 3600);
-
   await redis.del(SOS_CACHE_KEY);
+  await redis.del(`sos:${payload.user.toString()}`); // ইউজার ক্যাশ মুছে ফেলা
 
   return res;
 };
 
 const getSos = async () => {
-  const cached = await redis.get(SOS_CACHE_KEY);
-
-  if (cached) {
+  const cached: any = await redis.get(SOS_CACHE_KEY);
+  if (JSON.parse(cached)?.length !== 0) {
     return JSON.parse(cached);
   }
+
   const res = await Sos.find({ isActive: true });
 
   await redis.set(SOS_CACHE_KEY, JSON.stringify(res), "EX", 3600);
@@ -42,19 +43,16 @@ const getSos = async () => {
 const getMySos = async (myId: ObjectId) => {
   const cacheKey = `sos:${myId.toString()}`;
 
-  // 1. Try to get from Redis
   const cached = await redis.get(cacheKey);
   if (cached) {
     return JSON.parse(cached);
   }
 
-  // 2. Fetch from MongoDB
   const result = await Sos.find({
     user: new mongoose.Types.ObjectId(String(myId)),
-    isActive: true,
+    isActive: true, // Ensure only active ones are returned
   });
 
-  // 3. Save in Redis (5 minutes = 300 seconds)
   await redis.set(cacheKey, JSON.stringify(result), "EX", 300);
 
   return result;
@@ -65,20 +63,32 @@ const updateSos = async (sosId: ObjectId, payload: Partial<ISos>) => {
 
   if (res) {
     await redis.del(SOS_CACHE_KEY);
+    await redis.del(`sos:${res.user.toString()}`); // ইউজার স্পেসিফিক ক্যাশ ডিলিট
   }
 
   return res;
 };
 
-const deactivateSos = async (sosId: ObjectId) => {
-  const res = await Sos.findByIdAndUpdate(
-    sosId,
+const deactivateSos = async (sosId: ObjectId, userId: ObjectId) => {
+  const existingSos = await Sos.findOne({ _id: sosId, user: userId });
+
+  if (!existingSos) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "SOS not found for the given user"
+    );
+  }
+
+  const res = await Sos.findOneAndUpdate(
+    { _id: sosId, user: userId },
     { isActive: false },
     { new: true }
   );
 
   if (res) {
-    await redis.del(SOS_CACHE_KEY);
+    const userCacheKey = `sos:${userId.toString()}`;
+    await redis.del(SOS_CACHE_KEY); // delete general cache
+    await redis.del(userCacheKey); // delete user-specific cache
   }
 
   return res;
@@ -88,9 +98,10 @@ const sendSosMail = async (myId: ObjectId, location: string) => {
   if (!location) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "location is missing in query url"
+      "Location is missing in query URL"
     );
   }
+
   const sosList: any[] = await Sos.find({
     user: myId,
     isActive: true,
@@ -100,18 +111,20 @@ const sendSosMail = async (myId: ObjectId, location: string) => {
     })
     .select("email user -_id");
 
-  // Example: extract emails to send
   const emails = sosList
     .map((sos: any) => sos?.email)
     .filter((email: string | undefined) => !!email);
 
-  emails.map((email) => {
-    sendEmail(
-      email,
-      `Urgent Alert: ${sosList[0]?.user?.name} May Be in Danger at ${location}`,
-      `Dear Concern,
+  const userName = sosList[0]?.user?.name || "Your Contact";
 
-We would like to inform you that ${sosList[0]?.user?.name} may be in a potentially risky situation at the following location: ${location}.
+  await Promise.all(
+    emails.map((email) =>
+      sendEmail(
+        email,
+        `Urgent Alert: ${userName} May Be in Danger at ${location}`,
+        `Dear Concern,
+
+We would like to inform you that ${userName} may be in a potentially risky situation at the following location: ${location}.
 
 This alert has been triggered for safety purposes, and immediate attention may be required. If you are able to reach out or assist in any way, please do so promptly.
 
@@ -119,8 +132,9 @@ We are continuously monitoring the situation and will keep you updated if more i
 
 Stay safe,
 The Security Monitoring Team`
-    );
-  });
+      )
+    )
+  );
 };
 
 export const sos_service = {
