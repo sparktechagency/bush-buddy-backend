@@ -9,6 +9,14 @@ export interface IUserVerification {
   otp?: string;
 }
 
+export interface IPayment {
+  status: "paid" | "not-paid" | "expired" | "free";
+  amount: number;
+  issuedAt: Date | null;
+  deadline: number;
+  deadlineType: "day" | "week" | "month" | "year";
+  subscription: ObjectId | null;
+}
 export interface IUser {
   _id?: ObjectId;
   name: string;
@@ -28,14 +36,7 @@ export interface IUser {
   fcmToken?: string;
   verification?: IUserVerification;
   status?: "active" | "blocked" | "pending";
-  payment: {
-    status: "paid" | "not-paid" | "expired" | "free";
-    amount: number;
-    issuedAt: Date;
-    deadline: number;
-    deadlineType: "day" | "week" | "month" | "year";
-    subscription: ObjectId;
-  };
+  payment: IPayment;
   msgResponse?: {
     isMyLastMessage: boolean;
   };

@@ -5,88 +5,105 @@ import httpStatus from "http-status";
 import { model, Schema } from "mongoose";
 
 import { CONFIG } from "../../../core/config";
-import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
-import { IUser, IUserVerification, UserModel } from "./user.interface";
+import {
+  IPayment,
+  IUser,
+  IUserVerification,
+  UserModel,
+} from "./user.interface";
 
+// ✅ UserVerification Subschema
 const userVerificationSchema = new Schema<IUserVerification>(
   {
     verified: {
       type: Boolean,
+      default: false,
     },
     plans: {
       type: Schema.Types.ObjectId,
       ref: "Subscription",
+      default: null,
     },
     plansType: {
       type: String,
       enum: ["basic", "advanced"],
+      default: "basic",
     },
     otp: {
       type: String,
-      select: 0,
+      select: false,
     },
   },
-  { timestamps: true }
+  { _id: false }
 );
 
+// ✅ Payment Subschema
+const paymentSchema = new Schema<IPayment>(
+  {
+    status: {
+      type: String,
+      enum: ["paid", "not-paid", "expired", "free"],
+      default: "not-paid",
+    },
+    amount: {
+      type: Number,
+      default: 0,
+    },
+    issuedAt: {
+      type: Date,
+      default: null,
+    },
+    deadline: {
+      type: Number,
+      default: 0,
+    },
+    deadlineType: {
+      type: String,
+      enum: ["day", "week", "month", "year"],
+      default: "day",
+    },
+    subscription: {
+      type: Schema.Types.ObjectId,
+      ref: "Subscription",
+      default: null,
+    },
+  },
+  { _id: false }
+);
+
+// ✅ User Schema
 const userSchema = new Schema<IUser, UserModel>(
   {
-    name: {
-      type: String,
-      required: false,
-      trim: true,
-    },
+    name: { type: String, trim: true },
     userName: {
       type: String,
       required: true,
       unique: true,
       trim: true,
       lowercase: true,
-      // validate: {
-      //   validator: function (value) {
-      //     // Regex to match valid usernames (alphanumeric and underscores)
-      //     return /^[a-zA-Z0-9_]+$/.test(value);
-      //   },
-      //   message: "Username must be alphanumeric and can include underscores",
-      // },
-      default: "", // Default value for userName
+      default: "",
     },
-
     bio: {
       type: String,
-      required: false,
       trim: true,
       maxlength: 160,
     },
-
     profileImage: {
       type: String,
       default:
         "https://res.cloudinary.com/dyalzfwd4/image/upload/v1738207704/user_wwrref.png",
-      required: false,
     },
-
     email: {
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
     },
-
     contactNumber: {
       type: String,
-      required: false,
-      // unique: true,
-      // validate: {
-      //   validator: function (value) {
-      //     // Regex to match phone numbers with a country code
-      //     return /^\+(\d{1,4})\d{6,15}$/.test(value); // Ensures the phone number starts with a + followed by a country code and valid phone number
-      //   },
-      //   message:
-      //     "Phone number must be a valid phone number with a country code",
-      // },
+      default: "",
     },
-
     location: {
       type: {
         type: String,
@@ -98,69 +115,47 @@ const userSchema = new Schema<IUser, UserModel>(
         default: [0, 0],
       },
     },
-
     locationName: {
       type: String,
       default: "",
     },
-
     password: {
       type: String,
       required: true,
       minlength: 8,
-      select: 0,
+      select: false,
     },
-
     confirmPassword: {
       type: String,
+      select: false,
       validate: {
         validator: function (this: IUser, value: string) {
           return value === this.password;
         },
         message: "Passwords do not match.",
       },
-      select: 0,
     },
-
     role: {
       type: String,
-      enum: [USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN],
+      enum: ["user", "admin", "supper-admin"], // use your enum constant if available
       required: true,
     },
-
     fcmToken: {
       type: String,
       default: "",
     },
-
     verification: {
       type: userVerificationSchema,
+      default: () => ({}),
     },
-
     status: {
       type: String,
       enum: ["active", "blocked", "pending"],
       default: "active",
     },
     payment: {
-      status: {
-        type: String,
-        enum: ["paid", "not-paid", "expired", "free"],
-        default: "not-paid",
-      },
-      subscription: {
-        type: Schema.Types.ObjectId,
-        ref: "Subscription",
-        default: null,
-      },
-      deadline: {
-        type: Number,
-        default: 0,
-      },
-      issuedAt: {
-        type: Date,
-        default: null,
-      },
+      type: paymentSchema,
+      default: () => ({}),
     },
     msgResponse: {
       isMyLastMessage: {
@@ -182,11 +177,9 @@ const userSchema = new Schema<IUser, UserModel>(
         default: 0,
       },
     },
-
     passwordChangedAt: {
       type: Date,
     },
-
     isDeleted: {
       type: Boolean,
       default: false,
