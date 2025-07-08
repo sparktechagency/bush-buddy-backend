@@ -4,6 +4,7 @@ import mongoose, { ObjectId } from "mongoose";
 import redis from "../../../common/utils/redis/redis";
 import { sendEmail } from "../../../common/utils/sendEmail/sendEmail";
 import AppError from "../../../core/error/AppError";
+import { generateSosAlertEmail } from "./sos.html";
 import { ISos } from "./sos.interface";
 import { Sos } from "./sos.model";
 
@@ -121,17 +122,8 @@ const sendSosMail = async (myId: ObjectId, location: string) => {
     emails.map((email) =>
       sendEmail(
         email,
-        `Urgent Alert: ${userName} May Be in Danger at ${location}`,
-        `Dear Concern,
-
-We would like to inform you that ${userName} may be in a potentially risky situation at the following location: ${location}.
-
-This alert has been triggered for safety purposes, and immediate attention may be required. If you are able to reach out or assist in any way, please do so promptly.
-
-We are continuously monitoring the situation and will keep you updated if more information becomes available.
-
-Stay safe,
-The Security Monitoring Team`
+        `🚨 Urgent Alert: ${userName} at Risk in ${location}`,
+        generateSosAlertEmail(userName, location)
       )
     )
   );
