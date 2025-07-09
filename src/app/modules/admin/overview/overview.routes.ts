@@ -10,12 +10,6 @@ import { overviewValidator } from "./overview.validation";
 
 const router = Router();
 
-router.get(
-  "/get-user-chart",
-  auth(USER_ROLE.ADMIN),
-  overviewController.getUserChart
-);
-
 router.put(
   "/update-admin",
   upload.single("profileImage"),
@@ -25,10 +19,12 @@ router.put(
   overviewController.updateAdmin
 );
 
+router.get("/user", auth(USER_ROLE.ADMIN), overviewController.userOverview);
+
 router.get(
-  "/earnings",
+  "/income-summery",
   auth(USER_ROLE.ADMIN),
-  overviewController.totalEarnings
+  overviewController.getIncomeSummary
 );
 
 export const overviewRouter = router;

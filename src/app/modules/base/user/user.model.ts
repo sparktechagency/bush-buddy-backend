@@ -39,6 +39,7 @@ const userVerificationSchema = new Schema<IUserVerification>(
 );
 
 // ✅ Payment Subschema
+// define paymentSchema as you've done
 const paymentSchema = new Schema<IPayment>(
   {
     status: {
@@ -46,22 +47,10 @@ const paymentSchema = new Schema<IPayment>(
       enum: ["paid", "not-paid", "expired", "free"],
       default: "not-paid",
     },
-    totalPay: {
-      type: Number,
-      default: 0,
-    },
-    amount: {
-      type: Number,
-      default: 0,
-    },
-    issuedAt: {
-      type: Date,
-      default: null,
-    },
-    deadline: {
-      type: Number,
-      default: 0,
-    },
+    totalPay: { type: Number, default: 0 },
+    amount: { type: Number, default: 0 },
+    issuedAt: { type: Date, default: null },
+    deadline: { type: Number, default: 0 },
     deadlineType: {
       type: String,
       enum: ["day", "week", "month", "year"],
@@ -141,7 +130,7 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "supper-admin"], // use your enum constant if available
+      enum: ["user", "admin", "supper-admin"],
       required: true,
     },
     fcmToken: {
@@ -150,7 +139,12 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     verification: {
       type: userVerificationSchema,
-      default: () => ({}),
+      default: () => ({
+        verified: false,
+        plans: null,
+        plansType: "",
+        otp: "",
+      }),
     },
     status: {
       type: String,
@@ -158,8 +152,16 @@ const userSchema = new Schema<IUser, UserModel>(
       default: "active",
     },
     payment: {
-      type: paymentSchema,
-      default: () => ({}),
+      type: paymentSchema as unknown as Schema,
+      default: () => ({
+        status: "not-paid",
+        totalPay: 0,
+        amount: 0,
+        issuedAt: null,
+        deadline: 0,
+        deadlineType: "day",
+        subscription: null,
+      }),
     },
     msgResponse: {
       isMyLastMessage: {

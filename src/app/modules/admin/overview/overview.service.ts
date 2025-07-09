@@ -1,68 +1,11 @@
+import { endOfDay, startOfDay } from "date-fns";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import { ObjectId, PipelineStage } from "mongoose";
-import { monthNames } from "../../../common/helpers/query.halpers";
+import { monthSortName } from "../../../common/helpers/query.helpars";
+import QueryBuilder from "../../../core/builders/QueryBuilder";
 import AppError from "../../../core/error/AppError";
 import { User } from "../../base/user/user.model";
-
-const getUserChart = async (year: string = "2025") => {
-  // Generate an array with all months, initializing buyers and sellers to 0
-  const allMonths = Array.from({ length: 12 }, (_, i) => ({
-    month: i + 1,
-    buyers: 0,
-    sellers: 0,
-  }));
-
-  const userStats = await User.aggregate([
-    {
-      $match: {
-        createdAt: {
-          $gte: new Date(`${year}-01-01T00:00:00Z`),
-          $lt: new Date(`${parseInt(year) + 1}-01-01T00:00:00Z`),
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          month: { $month: "$createdAt" },
-          role: "$role",
-        },
-        count: { $sum: 1 },
-      },
-    },
-    {
-      $group: {
-        _id: "$_id.month",
-        buyers: {
-          $sum: {
-            $cond: [{ $eq: ["$_id.role", "buyer"] }, "$count", 0],
-          },
-        },
-        sellers: {
-          $sum: {
-            $cond: [{ $eq: ["$_id.role", "seller"] }, "$count", 0],
-          },
-        },
-      },
-    },
-    {
-      $sort: { _id: 1 },
-    },
-  ]);
-
-  // Merge aggregated data with the allMonths array
-  const chartData = allMonths.map((monthData) => {
-    const found = userStats.find((stat) => stat._id === monthData.month);
-    return {
-      month: monthNames[monthData.month - 1],
-      buyers: found ? found.buyers : 0,
-      sellers: found ? found.sellers : 0,
-    };
-  });
-
-  return { year, chartData };
-};
 
 const updateAdmin = async (adminId: ObjectId, payload: any) => {
   if (payload?.email) {
@@ -84,22 +27,137 @@ const updateAdmin = async (adminId: ObjectId, payload: any) => {
     );
   }
 
-  const result = User.findByIdAndUpdate(adminId, payload, { new: true });
-
-  return result;
+  return User.findByIdAndUpdate(adminId, payload, { new: true });
 };
 
-const getEarnings = async () => {
+const userOverview = async (currentYear: number) => {
+  const year = Number(currentYear);
+
+  if (!year) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Year must be in query url!!");
+  }
+
+  const start = new Date(`${year}-01-01`);
+  const end = new Date(`${year + 1}-01-01`);
+
   const pipeline: PipelineStage[] = [];
 
   pipeline.push({
-    $group: {
-      _id: null,
-      totalEarnings: { $sum: "$payment.totalPay" },
+    $match: {
+      createdAt: {
+        $gte: start,
+        $lt: end,
+      },
     },
   });
 
-  const result = await User.aggregate(pipeline);
-  return result[0]?.totalEarnings ?? 0;
+  pipeline.push({
+    $group: {
+      _id: { $month: "$createdAt" },
+      totalUsers: { $sum: 1 },
+    },
+  });
+
+  pipeline.push({
+    $project: {
+      monthNumber: "$_id",
+      totalUsers: 1,
+      _id: 0,
+    },
+  });
+
+  pipeline.push({
+    $sort: { month: 1 },
+  });
+
+  const raw = await User.aggregate(pipeline);
+
+  const monthlyUsers = monthSortName.map((name, i) => {
+    const found = raw.find((item) => item.monthNumber === i + 1);
+
+    return {
+      month: name,
+      totalUsers: found?.totalUsers || 0,
+    };
+  });
+
+  const totalUsersInDB = await User.countDocuments();
+
+  const totalIncomeResult = await User.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalIncome: { $sum: "$payment.totalPay" },
+      },
+    },
+  ]);
+
+  const totalIncome = totalIncomeResult[0]?.totalIncome || 0;
+
+  return {
+    totalIncome,
+    totalUsersInDB,
+    monthlyUsers,
+  };
 };
-export const overviewService = { getUserChart, updateAdmin, getEarnings };
+
+const getIncomeSummary = async (query: Record<string, unknown>) => {
+  // 1. Total Income from all users
+  const totalIncomeResult = await User.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalIncome: { $sum: "$payment.totalPay" },
+      },
+    },
+  ]);
+
+  const totalIncome = totalIncomeResult[0]?.totalIncome || 0;
+
+  // 2. Today's Income: sum of payment.totalPay where payment.issuedAt is today
+  const todayStart = startOfDay(new Date());
+  const todayEnd = endOfDay(new Date());
+
+  const todayIncomeResult = await User.aggregate([
+    {
+      $match: {
+        "payment.issuedAt": {
+          $gte: todayStart,
+          $lte: todayEnd,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        todayIncome: { $sum: "$payment.totalPay" },
+      },
+    },
+  ]);
+
+  const todayIncome = todayIncomeResult[0]?.todayIncome || 0;
+
+  // All users
+  const userQuery = new QueryBuilder(User.find(), query)
+    .search(["name", "userName", "name"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await userQuery.countTotal();
+  const data = await userQuery.modelQuery;
+
+  return {
+    totalIncome,
+    todayIncome,
+    meta,
+    data,
+  };
+};
+
+export const overviewService = {
+  updateAdmin,
+  userOverview,
+  getIncomeSummary,
+};

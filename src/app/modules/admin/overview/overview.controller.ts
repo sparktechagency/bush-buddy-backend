@@ -5,16 +5,6 @@ import catchAsync from "../../../common/utils/catchAsync";
 import sendResponse from "../../../common/utils/sendResponse";
 import { overviewService } from "./overview.service";
 
-const getUserChart = catchAsync(async (req, res) => {
-  const result = await overviewService.getUserChart(req.query.year as any);
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "User chart retrieved successful!",
-    data: result,
-  });
-});
-
 const updateAdmin = catchAsync(async (req, res) => {
   const result = await overviewService.updateAdmin(
     req.user.id as any,
@@ -28,14 +18,28 @@ const updateAdmin = catchAsync(async (req, res) => {
   });
 });
 
-const totalEarnings = catchAsync(async (req, res) => {
-  const result = await overviewService.getEarnings();
+const userOverview = catchAsync(async (req, res) => {
+  const result = await overviewService.userOverview(req.query.year as any);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Total earning retrieve successful!",
+    message: "Total user overview retrieve successful!",
     data: result,
   });
 });
 
-export const overviewController = { getUserChart, updateAdmin, totalEarnings };
+const getIncomeSummary = catchAsync(async (req, res) => {
+  const result = await overviewService.getIncomeSummary(req.query as any);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Income summery retrieved successful!",
+    data: result,
+  });
+});
+
+export const overviewController = {
+  getIncomeSummary,
+  updateAdmin,
+  userOverview,
+};
