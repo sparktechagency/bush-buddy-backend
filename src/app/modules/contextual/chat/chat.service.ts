@@ -83,19 +83,40 @@ const getMyPartners = async (myId: string) => {
       },
     },
     {
+      $sort: {
+        updatedAt: -1,
+      },
+    },
+    {
       $project: {
         userId: {
           $cond: [{ $eq: ["$sender", myObjectId] }, "$receiver", "$sender"],
         },
         isSenderRead: 1,
         isReceiverRead: 1,
+        content: 1,
+        images: 1,
+        isImage: 1,
+        chatTime: 1,
+        sender: 1,
+        receiver: 1,
       },
     },
     {
       $group: {
         _id: "$userId",
-        isSenderRead: { $last: "$isSenderRead" },
-        isReceiverRead: { $last: "$isReceiverRead" },
+        isSenderRead: { $first: "$isSenderRead" },
+        isReceiverRead: { $first: "$isReceiverRead" },
+        lastMessage: {
+          $first: {
+            content: "$content",
+            images: "$images",
+            isImage: "$isImage",
+            chatTime: "$chatTime",
+            sender: "$sender",
+            receiver: "$receiver",
+          },
+        },
       },
     },
     {
@@ -142,6 +163,7 @@ const getMyPartners = async (myId: string) => {
               isFriend: "$isFriend",
               isSenderRead: "$isSenderRead",
               isReceiverRead: "$isReceiverRead",
+              lastMessage: "$lastMessage",
             },
           ],
         },
@@ -158,6 +180,7 @@ const getMyPartners = async (myId: string) => {
         isFriend: 1,
         isSenderRead: 1,
         isReceiverRead: 1,
+        lastMessage: 1,
       },
     },
   ]);
