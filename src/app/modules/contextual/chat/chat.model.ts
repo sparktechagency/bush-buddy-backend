@@ -12,7 +12,11 @@ const ChatSchema = new Schema<IChat>(
       type: Boolean,
       default: false,
     },
-    isRead: {
+    isSenderRead: {
+      type: Boolean,
+      default: false,
+    },
+    isReceiverRead: {
       type: Boolean,
       default: false,
     },

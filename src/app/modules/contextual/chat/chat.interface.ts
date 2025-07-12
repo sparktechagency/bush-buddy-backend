@@ -7,7 +7,8 @@ export interface IChat {
   receiver: ObjectId;
   images: string[];
   isImage: boolean;
-  isRead: boolean;
+  isSenderRead: boolean;
+  isReceiverRead: boolean;
   isShow: boolean;
   chatTime: Date;
   createdAt: Date;

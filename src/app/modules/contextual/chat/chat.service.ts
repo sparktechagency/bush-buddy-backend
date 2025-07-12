@@ -74,25 +74,28 @@ const getChat = async (payload: { myId: ObjectId; partnerId: ObjectId }) => {
 // };
 
 const getMyPartners = async (myId: string) => {
+  const myObjectId = new mongoose.Types.ObjectId(myId);
+
   const chatUsers = await Chat.aggregate([
     {
       $match: {
-        $or: [
-          { sender: new mongoose.Types.ObjectId(myId) },
-          { receiver: new mongoose.Types.ObjectId(myId) },
-        ],
+        $or: [{ sender: myObjectId }, { receiver: myObjectId }],
       },
     },
     {
       $project: {
         userId: {
-          $cond: [{ $eq: ["$sender", myId] }, "$receiver", "$sender"],
+          $cond: [{ $eq: ["$sender", myObjectId] }, "$receiver", "$sender"],
         },
+        isSenderRead: 1,
+        isReceiverRead: 1,
       },
     },
     {
       $group: {
         _id: "$userId",
+        isSenderRead: { $last: "$isSenderRead" },
+        isReceiverRead: { $last: "$isReceiverRead" },
       },
     },
     {
@@ -107,8 +110,41 @@ const getMyPartners = async (myId: string) => {
       $unwind: "$user",
     },
     {
+      $lookup: {
+        from: "friends",
+        let: { userId: "$user._id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$friendId", "$$userId"] },
+                  { $eq: ["$userId", myObjectId] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "isMyFriendCheck",
+      },
+    },
+    {
+      $addFields: {
+        isFriend: { $gt: [{ $size: "$isMyFriendCheck" }, 0] },
+      },
+    },
+    {
       $replaceRoot: {
-        newRoot: "$user",
+        newRoot: {
+          $mergeObjects: [
+            "$user",
+            {
+              isFriend: "$isFriend",
+              isSenderRead: "$isSenderRead",
+              isReceiverRead: "$isReceiverRead",
+            },
+          ],
+        },
       },
     },
     {
@@ -118,9 +154,10 @@ const getMyPartners = async (myId: string) => {
         email: 1,
         profileImage: 1,
         locationName: 1,
-        msgResponse: 1,
         isOnline: 1,
         isFriend: 1,
+        isSenderRead: 1,
+        isReceiverRead: 1,
       },
     },
   ]);

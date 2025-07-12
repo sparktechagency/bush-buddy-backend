@@ -38,9 +38,9 @@ export interface IUser {
   verification?: IUserVerification;
   status?: "active" | "blocked" | "pending";
   payment: IPayment;
-  msgResponse?: {
-    isMyLastMessage: boolean;
-  };
+  // msgResponse?: {
+  //   isMyLastMessage: boolean;
+  // };
   ratings?: {
     star: number;
     totalReview: number;

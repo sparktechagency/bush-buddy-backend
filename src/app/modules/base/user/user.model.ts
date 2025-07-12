@@ -163,12 +163,12 @@ const userSchema = new Schema<IUser, UserModel>(
         subscription: null,
       }),
     },
-    msgResponse: {
-      isMyLastMessage: {
-        type: Boolean,
-        default: true,
-      },
-    },
+    // msgResponse: {
+    //   isMyLastMessage: {
+    //     type: Boolean,
+    //     default: true,
+    //   },
+    // },
     ratings: {
       totalUser: {
         type: Number,
