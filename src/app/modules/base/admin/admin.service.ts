@@ -23,9 +23,7 @@ const seedSuperAdmin = async () => {
     verification: {
       verified: true,
     },
-    msgResponse: {
-      isMyLastMessage: true,
-    },
+
     payment: {
       status: "free",
       totalPay: 0,
