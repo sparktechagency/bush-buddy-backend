@@ -6,6 +6,10 @@ export interface IChat {
   sender: ObjectId;
   receiver: ObjectId;
   images: string[];
+  location: {
+    type: string;
+    coordinates: number[];
+  };
   isImage: boolean;
   isSenderRead: boolean;
   isReceiverRead: boolean;

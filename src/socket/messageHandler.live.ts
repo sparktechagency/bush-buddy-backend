@@ -36,9 +36,14 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
         content: message.content,
         sender: user._id,
         images: message.images || [],
+        location: {
+          type: "Point",
+          coordinates: message.location,
+        },
         receiver: new mongoose.Types.ObjectId(message.receiver),
         timestamp: new Date(),
       };
+      console.log("🚀 ~ socket.on ~ newMessage:", newMessage);
 
       globalMessages.push(newMessage);
       io.emit(`receiverMsg::${message.receiver}`, globalMessages);

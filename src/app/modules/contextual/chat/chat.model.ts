@@ -8,10 +8,24 @@ const ChatSchema = new Schema<IChat>(
     sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
     receiver: { type: Schema.Types.ObjectId, ref: "User", required: true },
     images: { type: [String], default: [] },
+
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        default: [0, 0],
+      },
+    },
+
     isImage: {
       type: Boolean,
       default: false,
     },
+
     isSenderRead: {
       type: Boolean,
       default: false,
