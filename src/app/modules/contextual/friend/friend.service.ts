@@ -38,9 +38,10 @@ export const createFriend = async (payload: IFriend) => {
 // };
 
 const getMyFriends = async (myId: string) => {
-  const Friending = await Friend.find({ userId: myId })
-    .populate("friendId", "name email profileImage")
-    .lean();
+  const Friending = await Friend.find({ userId: myId }).populate(
+    "friendId",
+    "name email profileImage"
+  );
 
   return Friending;
 };

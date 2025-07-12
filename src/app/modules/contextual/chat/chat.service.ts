@@ -33,14 +33,66 @@ const getChat = async (payload: { myId: ObjectId; partnerId: ObjectId }) => {
   return result;
 };
 
-const getMyPartners = async (myId: ObjectId) => {
-  const partners = await Chat.aggregate([
-    { $match: { sender: new mongoose.Types.ObjectId(myId as any) } },
-    { $sort: { createdAt: -1 } },
+// const getMyPartners = async (myId: ObjectId) => {
+//   const partners = await Chat.aggregate([
+//     { $match: { sender: new mongoose.Types.ObjectId(myId as any) } },
+//     { $sort: { createdAt: -1 } },
+//     {
+//       $group: {
+//         _id: "$receiver",
+//         latestChat: { $first: "$$ROOT" },
+//       },
+//     },
+//     {
+//       $lookup: {
+//         from: "users",
+//         localField: "_id",
+//         foreignField: "_id",
+//         as: "receiverData",
+//       },
+//     },
+//     {
+//       $unwind: "$receiverData",
+//     },
+//     {
+//       $project: {
+//         _id: 0,
+//         receiver: "$receiverData._id",
+//         firstName: "$receiverData.firstName",
+//         surName: "$receiverData.surName",
+//         email: "$receiverData.email",
+//         profileImage: "$receiverData.profileImage",
+//         isOnline: "$receiverData.isOnline",
+//         createdAt: "$latestChat.createdAt",
+//         updatedAt: "$latestChat.updatedAt",
+//       },
+//     },
+//     { $sort: { createdAt: -1 } },
+//   ]);
+
+//   return partners;
+// };
+
+const getMyPartners = async (myId: string) => {
+  const chatUsers = await Chat.aggregate([
+    {
+      $match: {
+        $or: [
+          { sender: new mongoose.Types.ObjectId(myId) },
+          { receiver: new mongoose.Types.ObjectId(myId) },
+        ],
+      },
+    },
+    {
+      $project: {
+        userId: {
+          $cond: [{ $eq: ["$sender", myId] }, "$receiver", "$sender"],
+        },
+      },
+    },
     {
       $group: {
-        _id: "$receiver",
-        latestChat: { $first: "$$ROOT" },
+        _id: "$userId",
       },
     },
     {
@@ -48,29 +100,33 @@ const getMyPartners = async (myId: ObjectId) => {
         from: "users",
         localField: "_id",
         foreignField: "_id",
-        as: "receiverData",
+        as: "user",
       },
     },
     {
-      $unwind: "$receiverData",
+      $unwind: "$user",
+    },
+    {
+      $replaceRoot: {
+        newRoot: "$user",
+      },
     },
     {
       $project: {
-        _id: 0,
-        receiver: "$receiverData._id",
-        firstName: "$receiverData.firstName",
-        surName: "$receiverData.surName",
-        email: "$receiverData.email",
-        profileImage: "$receiverData.profileImage",
-        isOnline: "$receiverData.isOnline",
-        createdAt: "$latestChat.createdAt",
-        updatedAt: "$latestChat.updatedAt",
+        name: 1,
+        userName: 1,
+        email: 1,
+        profileImage: 1,
+        locationName: 1,
+        msgResponse: 1,
+        isOnline: 1,
+        isFriend: 1,
+        fcmToken: 1,
       },
     },
-    { $sort: { createdAt: -1 } },
   ]);
 
-  return partners;
+  return chatUsers;
 };
 
 const sendImages = async (payload: any) => {
