@@ -121,7 +121,6 @@ const getMyPartners = async (myId: string) => {
         msgResponse: 1,
         isOnline: 1,
         isFriend: 1,
-        fcmToken: 1,
       },
     },
   ]);
