@@ -22,6 +22,12 @@ router.put(
 router.get("/user", auth(USER_ROLE.ADMIN), overviewController.userOverview);
 
 router.get(
+  "/income-and-users-total",
+  auth(USER_ROLE.ADMIN),
+  overviewController.totalIncomeAndUser
+);
+
+router.get(
   "/income-summery",
   auth(USER_ROLE.ADMIN),
   overviewController.getIncomeSummary

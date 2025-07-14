@@ -38,8 +38,19 @@ const getIncomeSummary = catchAsync(async (req, res) => {
   });
 });
 
+const totalIncomeAndUser = catchAsync(async (req, res) => {
+  const result = await overviewService.totalIncomeAndUser();
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Income summery retrieved successful!",
+    data: result,
+  });
+});
+
 export const overviewController = {
   getIncomeSummary,
+  totalIncomeAndUser,
   updateAdmin,
   userOverview,
 };

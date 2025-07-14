@@ -101,6 +101,26 @@ const userOverview = async (currentYear: number) => {
   };
 };
 
+const totalIncomeAndUser = async () => {
+  const totalUsersInDB = await User.countDocuments();
+
+  const totalIncomeResult = await User.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalIncome: { $sum: "$payment.totalPay" },
+      },
+    },
+  ]);
+
+  const totalIncome = totalIncomeResult[0]?.totalIncome || 0;
+
+  return {
+    totalIncome,
+    totalUsersInDB,
+  };
+};
+
 const getIncomeSummary = async (query: Record<string, unknown>) => {
   // 1. Total Income from all users
   const totalIncomeResult = await User.aggregate([
@@ -159,5 +179,6 @@ const getIncomeSummary = async (query: Record<string, unknown>) => {
 export const overviewService = {
   updateAdmin,
   userOverview,
+  totalIncomeAndUser,
   getIncomeSummary,
 };

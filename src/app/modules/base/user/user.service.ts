@@ -98,7 +98,8 @@ const getUsers = async (
     pipeline.push({
       $match: {
         $or: [
-          { firstName: searchRegex },
+          { name: searchRegex },
+          { userName: searchRegex },
           { email: searchRegex },
           { contactNumber: searchRegex },
         ],
