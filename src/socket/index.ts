@@ -32,13 +32,13 @@ const socketHandler = (io: Server) => {
   // ✅ Actual socket connection (only if middleware passes)
   io.on("connection", async (socket: Socket) => {
     const { user } = socket as any;
-    console.log(`✅ Authenticated user connected: ${socket.id}`);
+    console.info(`✅ Authenticated user connected: ${socket.id}`);
 
     messageHandler(io, socket, user);
 
     socket.on("disconnect", async () => {
       await userStatusHandler.setUserOffline(user._id);
-      console.log(`❌ User disconnected: ${socket.id}`);
+      console.info(`❌ User disconnected: ${socket.id}`);
     });
   });
 };

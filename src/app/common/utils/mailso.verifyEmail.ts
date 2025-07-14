@@ -19,7 +19,6 @@ export const isEmailVerified = async (email: string) => {
     const data = result.data;
 
     // Console log for debugging
-    // console.log("📨 Mailso verification:", data);
 
     if (
       data.result === "deliverable" &&

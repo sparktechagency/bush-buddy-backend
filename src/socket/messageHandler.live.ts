@@ -14,12 +14,6 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
       socket.emit("io-error-t", "gdfgdf");
       // ✅ Input validation
       if (!message?.content || !message?.receiver) {
-        console.log(
-          "🚀 ~ socket.on ~ message: ERROR🚦",
-          message,
-          message?.content,
-          message?.receiver
-        );
         return emitSocketError(
           socket,
           "Invalid message format. 'content' and 'receiver' are required."
@@ -43,7 +37,6 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
         receiver: new mongoose.Types.ObjectId(message.receiver),
         timestamp: new Date(),
       };
-      console.log("🚀 ~ socket.on ~ newMessage:", newMessage);
 
       globalMessages.push(newMessage);
       io.emit(`receiverMsg::${message.receiver}`, globalMessages);

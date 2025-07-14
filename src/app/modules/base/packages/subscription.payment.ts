@@ -21,7 +21,6 @@ async function createStripeSubscriptionSession(
   user: UserInfo,
   currency: string
 ) {
-  console.log("🚀 ~ amount:", amount * 100, amount);
   if (!amount || amount <= 0) {
     throw new Error("Invalid amount");
   }

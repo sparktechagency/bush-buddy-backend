@@ -69,7 +69,6 @@ export const sendNotification = async (
     }
 
     // Optional: Log successful response for debugging
-    // console.log("FCM send response:", response);
 
     return response;
   } catch (error: any) {

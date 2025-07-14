@@ -13,7 +13,7 @@ export const initializeApolloServer = async (app: Express) => {
   });
   await server.start();
   server.applyMiddleware({ app, path: "/graphql" });
-  console.log(
+  console.info(
     chalk.bgBlueBright.white(
       ` ⛳ GraphQL ready at http://${CONFIG.CORE.backend_url}${server.graphqlPath} `
     )

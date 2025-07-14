@@ -161,15 +161,18 @@ const paymentSuccessStripe = async (payload: any) => {
       throw new AppError(httpStatus.BAD_REQUEST, "User is already paid");
     }
 
-    await User.findByIdAndUpdate(userId, {
+    const res = await User.findByIdAndUpdate(userId, {
       $set: {
         "payment.status": "paid",
-        "payment.totalPay": { $inc: session.amount_total ?? 0 },
-        "payment.amount": session.amount_total ?? 0,
+        "payment.amount": (session?.amount_total ?? 0) / 100,
         "payment.deadline": deadline || 0,
         "payment.deadlineType": session.metadata!.deadlineType || null,
         "payment.issuedAt": session.metadata!.issuedAt || new Date(),
         "payment.subscription": subscriptionID,
+        "payment.invoice": session.invoice,
+      },
+      $inc: {
+        "payment.totalPay": (session.amount_total ?? 0) / 100,
       },
     });
   }

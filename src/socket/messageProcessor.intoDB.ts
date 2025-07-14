@@ -23,6 +23,6 @@ cron.schedule("* * * * * *", async () => {
       await processBatch(globalGroupMessages);
     }
   } catch (error) {
-    console.log("🚀 cron.schedule error:", error);
+    console.info("🚀 cron.schedule error:", error);
   }
 });

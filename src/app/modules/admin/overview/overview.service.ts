@@ -158,7 +158,12 @@ const getIncomeSummary = async (query: Record<string, unknown>) => {
   const todayIncome = todayIncomeResult[0]?.todayIncome || 0;
 
   // All users
-  const userQuery = new QueryBuilder(User.find(), query)
+  const userQuery = new QueryBuilder(
+    User.find().populate({
+      path: "payment.subscription",
+    }),
+    query
+  )
     .search(["name", "userName", "name"])
     .filter()
     .sort()

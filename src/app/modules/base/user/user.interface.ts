@@ -17,6 +17,7 @@ export interface IPayment {
   deadline: number;
   deadlineType: "day" | "week" | "month" | "year";
   subscription: ObjectId | null;
+  invoice: string;
 }
 export interface IUser {
   _id?: ObjectId;
@@ -37,7 +38,7 @@ export interface IUser {
   fcmToken?: string;
   verification?: IUserVerification;
   status?: "active" | "blocked" | "pending";
-  payment: IPayment;
+  payment?: IPayment;
   // msgResponse?: {
   //   isMyLastMessage: boolean;
   // };

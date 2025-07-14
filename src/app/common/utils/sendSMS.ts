@@ -12,8 +12,8 @@ const sendSMS = (number: string) => {
       to: number,
     })
     .then((message: any) => {
-      console.log(message?.sid);
-      console.log(message?.status);
+      console.info(message?.sid);
+      console.info(message?.status);
     });
 };
 

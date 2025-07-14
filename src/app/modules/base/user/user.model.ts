@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import { model, Schema } from "mongoose";
 
 import { CONFIG } from "../../../core/config";
+import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
 import {
   IPayment,
@@ -51,6 +52,7 @@ const paymentSchema = new Schema<IPayment>(
     amount: { type: Number, default: 0 },
     issuedAt: { type: Date, default: null },
     deadline: { type: Number, default: 0 },
+    invoice: { type: String, default: "" },
     deadlineType: {
       type: String,
       enum: ["day", "week", "month", "year"],
@@ -130,7 +132,7 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "supper-admin"],
+      enum: [USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN],
       required: true,
     },
     fcmToken: {
@@ -161,6 +163,7 @@ const userSchema = new Schema<IUser, UserModel>(
         deadline: 0,
         deadlineType: "day",
         subscription: null,
+        invoice: "",
       }),
     },
     // msgResponse: {

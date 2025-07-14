@@ -43,7 +43,7 @@ app.use(
     "/api/v1",
     (req, res, next) => {
       const now = new Date().toLocaleString().replace(/\//g, "-");
-      console.log(chalk.bgYellowBright(` Hit detected at `), now);
+      console.info(chalk.bgYellowBright(` Hit detected at `), now);
       next();
     },
     router

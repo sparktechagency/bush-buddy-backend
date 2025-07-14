@@ -16,7 +16,7 @@ const setUserOnline = async (
     }
     return null;
   } catch (error: any) {
-    console.log("🚀 userStatusHandler setUserOnline error:", error);
+    console.info("🚀 userStatusHandler setUserOnline error:", error);
     io.emit("io-error", {
       success: false,
       message: error.message || "unknown error",
@@ -29,7 +29,7 @@ const setUserOffline = async (userId: string) => {
   try {
     await User.findByIdAndUpdate(userId, { isOnline: false });
   } catch (error) {
-    console.log("🚀 userStatusHandler setUserOffline error:", error);
+    console.info("🚀 userStatusHandler setUserOffline error:", error);
   }
 };
 

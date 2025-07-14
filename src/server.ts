@@ -24,14 +24,14 @@ async function main() {
 
     // Connect to MongoDB
     await mongoose.connect(CONFIG.CORE.db_uri as string);
-    console.log(chalk.blueBright("📦 Connected to MongoDB"));
+    console.info(chalk.blueBright("📦 Connected to MongoDB"));
 
     // Start the Express application server
     server = app.listen(
       Number(CONFIG.CORE.port),
       CONFIG.CORE.ip ?? "localhost",
       () => {
-        console.log(
+        console.info(
           chalk.bgBlackBright(
             `✅ Server is listening on http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.port} `
           )
@@ -49,7 +49,7 @@ async function main() {
         host: CONFIG.CORE.ip,
       },
       () => {
-        console.log(
+        console.info(
           chalk.bgYellowBright(
             `🗨️  Socket is running at http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.socket_port}`
           )
