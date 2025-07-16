@@ -3,7 +3,7 @@
 import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
 import { User } from "../app/modules/base/user/user.model";
-import { emitSocketError } from "./io.error";
+import { ioError } from "./io.error";
 
 const globalMessages: any[] = [];
 const globalGroupMessages: any[] = [];
@@ -14,7 +14,7 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
       socket.emit("io-error-t", "gdfgdf");
       // ✅ Input validation
       if (!message?.content || !message?.receiver) {
-        return emitSocketError(
+        return ioError(
           socket,
           "Invalid message format. 'content' and 'receiver' are required."
         );
@@ -23,7 +23,7 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
       // ✅ Check if user exists
       const userExists = await User.isUserExistById(user._id);
       if (!userExists) {
-        return emitSocketError(socket, "User does not exist.");
+        return ioError(socket, "User does not exist.");
       }
 
       const newMessage = {
@@ -42,10 +42,7 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
       io.emit(`receiverMsg::${message.receiver}`, globalMessages);
     } catch (err) {
       console.error("Error in senderMsg:", err);
-      emitSocketError(
-        socket,
-        "Something went wrong while sending the message."
-      );
+      ioError(socket, "Something went wrong while sending the message.");
     }
   });
 };
