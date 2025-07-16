@@ -9,7 +9,7 @@ const getChat = async (payload: { myId: ObjectId; partnerId: ObjectId }) => {
     throw new AppError(httpStatus.NOT_FOUND, "Partner ID is required");
   }
 
-  const result = await Chat.find({
+  return await Chat.find({
     $and: [
       {
         $or: [
@@ -20,7 +20,7 @@ const getChat = async (payload: { myId: ObjectId; partnerId: ObjectId }) => {
       { isShow: true },
     ],
   })
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: 1 })
     .populate({
       path: "sender",
       select: "firstName surName email profileImage isOnline",
@@ -29,54 +29,12 @@ const getChat = async (payload: { myId: ObjectId; partnerId: ObjectId }) => {
       path: "receiver",
       select: "firstName surName email profileImage isOnline",
     });
-
-  return result;
 };
-
-// const getMyPartners = async (myId: ObjectId) => {
-//   const partners = await Chat.aggregate([
-//     { $match: { sender: new mongoose.Types.ObjectId(myId as any) } },
-//     { $sort: { createdAt: -1 } },
-//     {
-//       $group: {
-//         _id: "$receiver",
-//         latestChat: { $first: "$$ROOT" },
-//       },
-//     },
-//     {
-//       $lookup: {
-//         from: "users",
-//         localField: "_id",
-//         foreignField: "_id",
-//         as: "receiverData",
-//       },
-//     },
-//     {
-//       $unwind: "$receiverData",
-//     },
-//     {
-//       $project: {
-//         _id: 0,
-//         receiver: "$receiverData._id",
-//         firstName: "$receiverData.firstName",
-//         surName: "$receiverData.surName",
-//         email: "$receiverData.email",
-//         profileImage: "$receiverData.profileImage",
-//         isOnline: "$receiverData.isOnline",
-//         createdAt: "$latestChat.createdAt",
-//         updatedAt: "$latestChat.updatedAt",
-//       },
-//     },
-//     { $sort: { createdAt: -1 } },
-//   ]);
-
-//   return partners;
-// };
 
 const getMyPartners = async (myId: string) => {
   const myObjectId = new mongoose.Types.ObjectId(myId);
 
-  const chatUsers = await Chat.aggregate([
+  return await Chat.aggregate([
     {
       $match: {
         $or: [{ sender: myObjectId }, { receiver: myObjectId }],
@@ -184,8 +142,6 @@ const getMyPartners = async (myId: string) => {
       },
     },
   ]);
-
-  return chatUsers;
 };
 
 const sendImages = async (payload: any) => {
@@ -200,13 +156,11 @@ const sendImages = async (payload: any) => {
     chatTime: new Date(),
   });
 
-  const result = await Chat.create(newChat);
-
-  return result;
+  return await Chat.create(newChat);
 };
 
 const getAllChat = async () => {
-  const result = await Chat.find()
+  return await Chat.find()
     .sort({ createdAt: -1 })
     .populate({
       path: "sender",
@@ -214,8 +168,6 @@ const getAllChat = async () => {
     .populate({
       path: "receiver",
     });
-
-  return result;
 };
 
 export const chatService = {

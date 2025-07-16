@@ -3,7 +3,7 @@
 import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
 import { User } from "../app/modules/base/user/user.model";
-import { emitSocketError } from "./errorHandler";
+import { emitSocketError } from "./io.error";
 
 const globalMessages: any[] = [];
 const globalGroupMessages: any[] = [];
