@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import cron from "node-cron";
 import { Chat } from "../app/modules/contextual/chat/chat.model";
-import { globalGroupMessages, globalMessages } from "./messageHandler.live";
+import { globalGroupMessages, globalMessages } from "./io.live";
 
 cron.schedule("* * * * * *", async () => {
   try {

@@ -1,10 +1,10 @@
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 export interface IChat {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   content: string;
-  sender: ObjectId;
-  receiver: ObjectId;
+  sender: mongoose.Types.ObjectId;
+  receiver: mongoose.Types.ObjectId;
   images: string[];
   location: {
     type: string;

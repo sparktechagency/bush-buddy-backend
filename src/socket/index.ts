@@ -5,7 +5,7 @@
 import httpStatus from "http-status";
 import { Server, Socket } from "socket.io";
 import AppError from "../app/core/error/AppError";
-import { messageHandler } from "./messageHandler.live";
+import { messageHandler } from "./io.live";
 import userStatusHandler from "./userStatusHandler";
 
 const socketHandler = (io: Server) => {

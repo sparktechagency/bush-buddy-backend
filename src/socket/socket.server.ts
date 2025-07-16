@@ -2,7 +2,7 @@ import http from "http";
 import { Server } from "socket.io";
 import socketHandler from ".";
 import app from "../app";
-import "./messageProcessor.intoDB";
+import "./io.cron.intoDB";
 
 const server = http.createServer(app);
 
