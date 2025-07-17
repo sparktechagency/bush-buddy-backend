@@ -1,27 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
+import { USER_ROLE } from "../../../core/constants/global.constants";
 
 export interface INotification {
-  sender?: ObjectId | undefined;
-  receiver: ObjectId | undefined;
-  receiverEmail: string | undefined;
-  receiverRole: "buyer" | "seller" | "admin";
+  sender?: mongoose.Types.ObjectId;
+  receiver: mongoose.Types.ObjectId;
+  receiverEmail?: string;
+  receiverRole?: (typeof USER_ROLE)[keyof typeof USER_ROLE];
   message: string;
   fcmToken?: string;
   type?: "hireRequest" | "accept" | "reject" | "cancelled" | "payment";
-  title?: string;
+  title: string;
   isRead?: boolean;
   link?: string;
 }
-
-// export interface ISendNotification {
-//   sender: string | undefined;
-//   receiver: string | undefined;
-//   receiverEmail: string | undefined;
-//   receiverRole: string | undefined;
-//   title: string;
-//   link: string | null;
-//   message: string;
-//   type?: "hireRequest" | "accept" | "reject" | "cancelled" | "payment";
-// }

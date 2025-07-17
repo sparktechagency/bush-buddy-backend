@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import { CONFIG } from "../../../core/config";
+import { USER_ROLE } from "../../../core/constants/global.constants";
 import { User } from "../user/user.model";
 import { sendNotification } from "./notification.utils";
 
 export interface IAdminSendNotificationPayload {
-  sender: ObjectId;
+  sender: mongoose.Types.ObjectId;
   type?: "hireRequest" | "accept" | "reject" | "cancelled" | "payment";
   title: string;
   message: string;
@@ -17,7 +18,7 @@ export const sendAdminNotifications = async (
 ) => {
   const admin = await User.findOne({
     email: CONFIG.CORE.supper_admin_email,
-    role: "admin",
+    role: USER_ROLE.ADMIN,
     "verification.verified": true,
     isDeleted: false,
     status: "active",
@@ -28,7 +29,7 @@ export const sendAdminNotifications = async (
       sender: payload.sender,
       receiver: admin?._id as any,
       receiverEmail: admin?.email,
-      receiverRole: "admin",
+      receiverRole: USER_ROLE.ADMIN,
       title: payload.title,
       message: payload.message,
       type: payload.type as any,

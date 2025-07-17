@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { USER_ROLE } from "../../../core/constants/global.constants";
 import { INotification } from "./notification.inerface";
 const NotificationSchema = new Schema<INotification>(
   {
@@ -21,8 +22,8 @@ const NotificationSchema = new Schema<INotification>(
 
     receiverRole: {
       type: String,
-      enum: ["buyer", "seller", "admin"],
-      required: true,
+      enum: Object.values(USER_ROLE),
+      default: USER_ROLE.USER,
     },
 
     type: {
