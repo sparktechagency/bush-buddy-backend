@@ -3,7 +3,6 @@
 import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
 import { User } from "../app/modules/base/user/user.model";
-import { IChat } from "../app/modules/contextual/chat/chat.interface";
 import { ioError } from "./io.error";
 
 const globalMessages: any[] = [];
@@ -27,23 +26,29 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
         return ioError(socket, "User does not exist.");
       }
 
-      const newMessage: IChat = {
-        _id: new mongoose.Types.ObjectId(),
-        content: message.content,
-        sender: user._id,
-        receiver: new mongoose.Types.ObjectId(message.receiver),
-        images: message.images || [],
-        location: {
-          type: "Point",
-          coordinates: message.location,
-        },
-        isImage: !!(message.images && message.images.length > 0),
-        isSenderRead: true,
-        isReceiverRead: false,
-        isShow: true,
-        chatTime: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      const newMessage = {
+        success: true,
+        message: "Socket message send successful!",
+        data: [
+          {
+            _id: new mongoose.Types.ObjectId(),
+            content: message.content,
+            sender: user._id,
+            receiver: new mongoose.Types.ObjectId(message.receiver),
+            images: message.images || [],
+            location: {
+              type: "Point",
+              coordinates: message.location,
+            },
+            isImage: !!(message.images && message.images.length > 0),
+            isSenderRead: true,
+            isReceiverRead: false,
+            isShow: true,
+            chatTime: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        ],
       };
 
       globalMessages.push(newMessage);
