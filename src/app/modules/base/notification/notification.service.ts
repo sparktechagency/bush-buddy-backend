@@ -3,33 +3,41 @@ import { INotification } from "./notification.inerface";
 import Notification from "./notification.model";
 
 const getNotificationFromDb = async (query: Record<string, any>) => {
-  const result = await Notification.find(query);
-  return result;
+  return await Notification.find(query).sort("-createdAt");
 };
 
 const updateNotification = async (
   id: string,
   payload: Partial<INotification>
 ) => {
-  const result = await Notification.findByIdAndUpdate(id, payload, {
+  return await Notification.findByIdAndUpdate(id, payload, {
     new: true,
   });
-  return result;
 };
 
 const makeMeRead = async (query: { user: any; notId: string }) => {
-  const result = await Notification.findOneAndUpdate(
+  return await Notification.findOneAndUpdate(
     { _id: query.notId, receiver: query.user },
     { isRead: true },
     {
       new: true,
     }
   );
-  return result;
+};
+
+const makeAllNotRead = async (query: { user: any; notId: string }) => {
+  return await Notification.updateMany(
+    { receiver: query.user },
+    { isRead: true },
+    {
+      new: true,
+    }
+  );
 };
 
 export const notificationServices = {
   getNotificationFromDb,
   updateNotification,
   makeMeRead,
+  makeAllNotRead,
 };

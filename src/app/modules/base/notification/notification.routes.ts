@@ -18,4 +18,10 @@ router.put(
   notificationController.makeRead
 );
 
+router.put(
+  "/make-all-not-read",
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER, USER_ROLE.USER),
+  notificationController.makeAllNotRead
+);
+
 export const notificationRoute = router;

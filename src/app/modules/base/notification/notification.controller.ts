@@ -37,8 +37,9 @@ const makeRead = catchAsync(async (req: Request, res: Response) => {
     receiver: req.user.id,
   });
 
-  if (!isNotification)
+  if (!isNotification) {
     throw new AppError(httpStatus.NOT_FOUND, "Notification is not exist!");
+  }
 
   const result = await notificationServices.makeMeRead(query as any);
   sendResponse(res, {
@@ -49,7 +50,22 @@ const makeRead = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const makeAllNotRead = catchAsync(async (req: Request, res: Response) => {
+  await User.isUserExistById(req.user.id);
+  const { query } = req;
+  query.user = req.user.id;
+
+  const result = await notificationServices.makeAllNotRead(query as any);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "All notifications read successfully",
+    data: result,
+  });
+});
+
 export const notificationController = {
   getAllNotification,
   makeRead,
+  makeAllNotRead,
 };

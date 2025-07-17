@@ -7,7 +7,6 @@ import app from "./app";
 import { CONFIG } from "./app/core/config";
 import { adminService } from "./app/modules/base/admin/admin.service";
 
-import { sendNotification } from "./app/modules/base/notification/notification.utils";
 import { server as socketServer } from "./socket/socket.server";
 
 let server: Server;
@@ -40,16 +39,16 @@ async function main() {
       }
     );
 
-    await sendNotification(
-      [
-        "eu3jxt4lwBpw7PAhACgqa6:APA91bEMaHPKEzZppBt9LZs9EerQ7Wb90OYALdYsTjxZJHrbSDS4-mZK4rmQYSvQVbkM9O0uLT2Cse3G7DAwUhTgCEWWfw8D-u94ldVewSKxU2MyKAeXMIM",
-      ],
-      {
-        title: "Hi, Hridoy🔴🔴🔴🔴🔴🔴🔴",
-        message: "How are you?",
-        receiver: new mongoose.Types.ObjectId("6874df34c056e32a245fb05c"),
-      }
-    );
+    // await sendNotification(
+    //   [
+    //     "eu3jxt4lwBpw7PAhACgqa6:APA91bEMaHPKEzZppBt9LZs9EerQ7Wb90OYALdYsTjxZJHrbSDS4-mZK4rmQYSvQVbkM9O0uLT2Cse3G7DAwUhTgCEWWfw8D-u94ldVewSKxU2MyKAeXMIM",
+    //   ],
+    //   {
+    //     title: "Hi, Hridoy🔴🔴🔴🔴🔴🔴🔴",
+    //     message: "How are you?",
+    //     receiver: new mongoose.Types.ObjectId("6874df34c056e32a245fb05c"),
+    //   }
+    // );
 
     // Seed the initial Super Admin user (if needed)
     await adminService.seedSuperAdmin();
