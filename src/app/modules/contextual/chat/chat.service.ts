@@ -19,16 +19,15 @@ const getChat = async (payload: { myId: ObjectId; partnerId: ObjectId }) => {
       },
       { isShow: true },
     ],
-  })
-    .sort({ createdAt: 1 })
-    .populate({
-      path: "sender",
-      select: "firstName surName email profileImage isOnline",
-    })
-    .populate({
-      path: "receiver",
-      select: "firstName surName email profileImage isOnline",
-    });
+  }).sort({ createdAt: 1 });
+  // .populate({
+  //   path: "sender",
+  //   select: "firstName surName email profileImage isOnline",
+  // })
+  // .populate({
+  //   path: "receiver",
+  //   select: "firstName surName email profileImage isOnline",
+  // });
 };
 
 const getMyPartners = async (myId: string) => {

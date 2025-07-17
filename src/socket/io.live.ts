@@ -26,6 +26,8 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
         return ioError(socket, "User does not exist.");
       }
 
+      
+
       const newMessage = {
         success: true,
         message: "Socket message send successful!",
@@ -52,7 +54,7 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
       };
 
       globalMessages.push(newMessage);
-      io.emit(`receiverMsg::${message.receiver}`, globalMessages);
+      io.emit(`receiverMsg::${message.receiver}`, newMessage);
     } catch (err) {
       console.error("Error in senderMsg:", err);
       ioError(socket, "Something went wrong while sending the message.");
