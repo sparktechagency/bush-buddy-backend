@@ -26,34 +26,32 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
         return ioError(socket, "User does not exist.");
       }
 
-      
+      const rawMsg = {
+        _id: new mongoose.Types.ObjectId(),
+        content: message.content,
+        sender: user._id,
+        receiver: new mongoose.Types.ObjectId(message.receiver),
+        images: message.images || [],
+        location: {
+          type: "Point",
+          coordinates: message.location || [0, 0],
+        },
+        isImage: !!(message.images && message.images.length > 0),
+        isSenderRead: true,
+        isReceiverRead: false,
+        isShow: true,
+        chatTime: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
       const newMessage = {
         success: true,
         message: "Socket message send successful!",
-        data: [
-          {
-            _id: new mongoose.Types.ObjectId(),
-            content: message.content,
-            sender: user._id,
-            receiver: new mongoose.Types.ObjectId(message.receiver),
-            images: message.images || [],
-            location: {
-              type: "Point",
-              coordinates: message.location,
-            },
-            isImage: !!(message.images && message.images.length > 0),
-            isSenderRead: true,
-            isReceiverRead: false,
-            isShow: true,
-            chatTime: new Date(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-        ],
+        data: [rawMsg],
       };
 
-      globalMessages.push(newMessage);
+      globalMessages.push(rawMsg);
       io.emit(`receiverMsg::${message.receiver}`, newMessage);
     } catch (err) {
       console.error("Error in senderMsg:", err);
